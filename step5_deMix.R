@@ -256,7 +256,7 @@ E(g)$color = colors[as.integer(OUT_SECOND_LAMBDA[,1] * 100)+1]
 node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
 
 pdf(paste0(TMP_DIR,'/G.pdf'),width=30,height=30)
-plot(g, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0,vertex.label.color = "black")
+plot(g, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0,vertex.label.color = "white")
 #plot(g, vertex.label.cex=0.3, vertex.size=0.05, vertex.label.dist=0.1,vertex.label.color = "black")
 plot( c(1:51)/100,c(1:51)/100, col=colors, ylab='Score', xlab='Score', pch=16,cex=5,lwd=5,type='p',main='Edge Color Key')
 dev.off()
