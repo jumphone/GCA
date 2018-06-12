@@ -4,7 +4,7 @@ library(Matrix)
 
 #args = commandArgs(trailingOnly=TRUE)
 
-exp_data=read.table('10X_Tumor72017_matrix.txt.uniq.txt',header=T,row.names=1)
+exp_data=read.table('10X_Tumor72017_matrix.txt.uniq.txt',header=T,row.names=1,sep='\t')
 
 
 EXP = CreateSeuratObject(raw.data = exp_data, min.cells = 3, min.genes=200)
