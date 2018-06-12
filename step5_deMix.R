@@ -27,9 +27,9 @@ write.table(args, file=paste0(TMP_DIR,'/Arguments.txt'),sep='\t',quote=F,row.nam
 
 
 #########Read Data############
-exp_data=read.table(REF, header=T, row.names=1, check.names=FALSE)
+exp_data=read.table(REF, header=T, row.names=1, check.names=FALSE,sep='\t')
 gene_name=rownames(exp_data)
-input_data=read.table(INPUT,header=T,row.names=1,check.names=FALSE)
+input_data=read.table(INPUT,header=T,row.names=1,check.names=FALSE,sep='\t')
 ROW_NUM=length(input_data[,1])
 COL_NUM=length(input_data[1,])
 ROW_LABEL=rownames(input_data)
