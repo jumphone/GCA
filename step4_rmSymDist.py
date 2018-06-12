@@ -86,5 +86,6 @@ for line in fi:
     seq=line.rstrip().split('\t')
     if seq[0] in SIG:
         fo.write(line)
+fo.close()
 fi.close()
 
