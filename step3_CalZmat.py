@@ -70,7 +70,8 @@ def SINGLE(p1, p2,p1_old_exp,p2_old_exp, p1_this_list, p2_this_list, pcc_old,pcc
             j+=1
         fo=open(outfile,'w')
         fo.write(p1+'.And.'+p2+'\t'+'\t'.join(Z)+'\n')
-
+        fo.close()
+        
 open(OUTDIR+'/header.txt','w').write('\t'.join(header)+'\n')
 
 jobs=[]
@@ -112,6 +113,7 @@ fo.write(open(OUTDIR+'/header.txt').read())
 for one in FILES:
     if '.ssn' in one: 
         fo.write(open(OUTDIR+'/'+one).read())
+        fo.close()
 ################################# 
 
 
