@@ -108,7 +108,7 @@ SINGLE = function(i){
             this_xlim = c(min(p1_exp),max(p1_exp))
             this_ylim = c(min(p2_exp),max(p2_exp))
             
-            this_v = which(p1_exp>0 & p2_exp>0)  
+            this_v = which(p1_exp!=0 & p2_exp!=0)  
             this_v_out = which( !(ori_data < UP & ori_data > DW ) )
             this_col=rep('black',length(p1_exp))
             this_col[this_v_out]='grey'
