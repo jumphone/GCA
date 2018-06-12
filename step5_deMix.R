@@ -131,6 +131,8 @@ SINGLE = function(i){
                     }
                 }
             ############################
+            this_out_xlim = c(min(p1_exp[this_v_out ]),max(p1_exp[this_v_out ]))
+            this_out_ylim = c(min(p2_exp[this_v_out ]),max(p2_exp[this_v_out ]))
 
             for(this_cluster_index in unique(clust_out[which(clust_out!=0)])){
                 tmp_cell_index = which(clust_out == this_cluster_index)
@@ -139,7 +141,7 @@ SINGLE = function(i){
                     tmp_p1_exp=p1_exp[tmp_cell_index]
                     tmp_p2_exp=p2_exp[tmp_cell_index]
                     this_pcc=round(cor(c(p1_exp[this_v],tmp_p1_exp), c(p2_exp[this_v],tmp_p2_exp)),2)
-                    plot(tmp_p1_exp, tmp_p2_exp, xlab=p1, ylab=p2, xlim=this_xlim, ylim=this_ylim,main=paste0('Cluster',as.character(this_cluster_index),', N=',as.character(length(tmp_p1_exp)),', AddPCC=',as.character(this_pcc)),pch=16,col=this_cluster_index+1)
+                    plot(tmp_p1_exp, tmp_p2_exp, xlab=p1, ylab=p2, xlim=this_out_xlim, ylim=this_out_ylim,main=paste0('Cluster',as.character(this_cluster_index),', N=',as.character(length(tmp_p1_exp)),', AddPCC=',as.character(this_pcc)),pch=16,col=this_cluster_index+1)
 
                     
                     }  
