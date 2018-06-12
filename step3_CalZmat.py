@@ -56,7 +56,7 @@ def SINGLE(p1, p2,p1_old_exp,p2_old_exp, p1_this_list, p2_this_list, pcc_old,pcc
         while j<len(header):
             p1_this=p1_this_list[j]
             p2_this=p2_this_list[j]
-            if p1_this * p2_this>0: #and data.PCC_POOL[edge][1]>=5:
+            if p1_this * p2_this !=0: #>0: #and data.PCC_POOL[edge][1]>=5:
                 p1_new_exp=p1_old_exp+[p1_this]
                 p2_new_exp=p2_old_exp+[p2_this]
                 pcc_new = stats.pearsonr(p1_new_exp,p2_new_exp)[0]
