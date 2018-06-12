@@ -59,7 +59,13 @@ for line in fi:
                 NEG.append(abs(value))
             elif value>0:
                 POS.append(abs(value))
-    st, pv=stats.ks_2samp(NEG,POS)
+    #st, pv=stats.ks_2samp(NEG,POS)
+    try:
+        st, pv=stats.ks_2samp(NEG,POS)
+    except Exception as e:
+        print e
+        st=0
+        pv=1
     #OUT.append([pv,tag])
     P.append(pv)
     OUT.append([tag,str(pv),','.join(Z_OUT)])
