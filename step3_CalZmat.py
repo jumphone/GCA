@@ -103,9 +103,16 @@ for edge in data.PCC_POOL:
 for p in jobs:
     p.join()
 
-subprocess.Popen('cat '+OUTDIR+'/*.ssn > '+OUTDIR+'/DATA.SSN',shell=True).wait()
-subprocess.Popen('cat '+OUTDIR+'/header.txt '+OUTDIR+'/DATA.SSN > '+OUT_FILE,shell=True).wait()
-
+#subprocess.Popen('cat '+OUTDIR+'/*.ssn > '+OUTDIR+'/DATA.SSN',shell=True).wait()
+#subprocess.Popen('cat '+OUTDIR+'/header.txt '+OUTDIR+'/DATA.SSN > '+OUT_FILE,shell=True).wait()
+#################################    
+FILES=os.listdir(OUTDIR)
+fo=open(OUT_FILE,'w')
+fo.write(open(OUTDIR+'/header.txt').read())
+for one in FILES:
+    if '.ssn' in one: 
+        fo.write(open(OUTDIR+'/'+one).read())
+################################# 
 
 
 
