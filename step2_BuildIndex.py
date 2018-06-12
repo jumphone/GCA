@@ -9,7 +9,6 @@ import sys
 import cPickle as pickle
 
 print '''
-
 $1 NETWORK_PATH (col1: gene; col2: gene)
 $2 EXP_POOL_PATH (row1: header; col 1: gene_name; other_cols: exp value)
 $3 OUT_DATA_PATH
@@ -70,27 +69,7 @@ for line in fpool:
             if len(header)==len(EXP[seq[0]])+1:
                 header=header[1:]
 
-    #except Exception as e:
-    #    pass   
-    '''
-    try:
-        seq=line.rstrip().split('\t')
-        if seq[0] in POINT:
-            EXP_GENE.add(seq[0])
-            tmp=[]
-            for one in seq[1:]:
-                tmp.append(float(one))
-            POOL_LENGTH=len(tmp)
-            EXP[seq[0]]=tmp
-            
-        ########
-        if len(header)==len(EXP[seq[0]])+1:
-            header=header[1:]
-         ########
-        
-    except Exception as e:
-        pass
-    '''
+
 fpool.close()
 print POOL_LENGTH
 
