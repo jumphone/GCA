@@ -113,7 +113,7 @@ fo.write(open(OUTDIR+'/header.txt').read())
 for one in FILES:
     if '.ssn' in one: 
         fo.write(open(OUTDIR+'/'+one).read())
-        fo.close()
+fo.close()
 ################################# 
 
 
