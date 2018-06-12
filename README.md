@@ -1,1 +1,1 @@
-# GCA: Gene Correlation Analysis in single-cell RNA-seq data
+# GCA: Gene Correlation Analysis in Single-cell RNA-seq data
