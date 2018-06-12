@@ -59,7 +59,6 @@ for line in fi:
                 NEG.append(abs(value))
             elif value>0:
                 POS.append(abs(value))
-    #st, pv=stats.ks_2samp(NEG,POS)
     try:
         st, pv=stats.ks_2samp(NEG,POS)
     except Exception as e:
@@ -73,6 +72,7 @@ for line in fi:
 
 #adP=stm.multipletests(P,method='fdr_bh')[1]
 #adP=stm.multipletests(P,method='bonferroni')[1]
+
 i=0
 SIG=set()
 while i<len(OUT):
@@ -81,6 +81,7 @@ while i<len(OUT):
         flag='_SIG_'
         SIG.add(OUT[i][0])
     #fo.write(OUT[i][0]+'\t'+OUT[i][1]+'\t'+str(adP[i])+'\t'+flag+'\t'+OUT[i][2]+'\n')
+    #fo.write(OUT[i][0]+'\t'+OUT[i][1]+'\t'+str(adP[i])+'\t'+flag+'\n')
     fo.write(OUT[i][0]+'\t'+OUT[i][1]+'\t'+flag+'\n')
     i+=1
 
@@ -94,3 +95,4 @@ for line in fi:
         fo.write(line)
 fo.close()
 fi.close()
+
