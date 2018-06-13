@@ -28,3 +28,8 @@ logexp <- log2(exptmm + 1)
 OUT=logexp 
 write.table(file='normalized_exp.txt',OUT,row.names=T,col.names=T,quote=F,sep='\t')
 save(EXP, file = "Seurat_EXP.Robj")
+
+
+
+
+
