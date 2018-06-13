@@ -38,6 +38,7 @@ COL_LABEL=colnames(input_data)
 
 ######Single Thread Funtion##################
 SINGLE = function(i){
+    print(i)
     set.seed(RANDOM_SEED)
     this_row_label=ROW_LABEL[i]
     tmp=t(input_data[i,])
@@ -54,13 +55,13 @@ SINGLE = function(i){
     PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
     MEAN=D$x[which(PEAK_PIT==1)]
     PEAK_NUM=length(which(PEAK_PIT==1))
-    ############################################
 
-    if(PEAK_NUM>1){
-        tmp_out_path=paste0(TMP_DIR,'/',this_row_label)
+    tmp_out_path=paste0(TMP_DIR,'/',this_row_label)
+    ori_data = t(input_data[i,])
+    ############################################
+    if(PEAK_NUM>1){       
         ###########Mixtools & assign cluster#############
         mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)        
-        ori_data = t(input_data[i,])
         clust_out = rep(0,length(ori_data))
         j=1
         while(j<=length(ori_data)){
@@ -76,7 +77,8 @@ SINGLE = function(i){
             j=j+1
             }     
         ############################################
-        if(length(unique(clust_out[which(clust_out!=0)]))>1  ) {  
+        #if(length(unique(clust_out[which(clust_out!=0)]))>1  ) { 
+        if(1==1){ 
             ###########Draw figures#############
             pdf(paste0(tmp_out_path,'.pdf'),width=10,height=10)
             par(mfrow=c(2,2))
@@ -160,9 +162,7 @@ SINGLE = function(i){
                     tmp_p1_exp=p1_exp[tmp_cell_index]
                     tmp_p2_exp=p2_exp[tmp_cell_index]
                     this_pcc=round(cor(c(p1_exp[this_v],tmp_p1_exp), c(p2_exp[this_v],tmp_p2_exp)),2)
-                    plot(tmp_p1_exp, tmp_p2_exp, xlab=p1, ylab=p2, xlim=this_nout_xlim, ylim=this_nout_ylim,main=paste0('Cluster',as.character(this_cluster_index),', N=',as.character(length(tmp_p1_exp)),', AddPCC=',as.character(this_pcc)),pch=16,col=this_cluster_index+1)
-
-                    
+                    plot(tmp_p1_exp, tmp_p2_exp, xlab=p1, ylab=p2, xlim=this_nout_xlim, ylim=this_nout_ylim,main=paste0('Cluster',as.character(this_cluster_index),', N=',as.character(length(tmp_p1_exp)),', AddPCC=',as.character(this_pcc)),pch=16,col=this_cluster_index+1)                   
                     }  
                 }
 
@@ -180,16 +180,81 @@ SINGLE = function(i){
             colnames(clust_out)=c('Cell_name','Zvalue','Color','Cluster',p1,p2) 
             write.table(as.matrix(clust_out),file=paste0(tmp_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
             ############################
+            if(length(mix1$lambda)>=2){
             #OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
-            OUT=c(this_row_label, length(tmp) * sort(mix1$lambda / length(COL_LABEL),decreasing=T)[2])
+                OUT=c(this_row_label, length(tmp) * sort(mix1$lambda / length(COL_LABEL),decreasing=T)[2])
+                }
+            else{OUT=c(this_row_label,0)}
             return(OUT)
             }
         }
-    print(i)
+    else{
+        if(1==1){
+            #######draw#############
+            pdf(paste0(tmp_out_path,'.pdf'),width=10,height=10)
+            par(mfrow=c(2,2))
+            plot(D,main=this_row_label)
+            abline(v=MEAN,col='red',lty=3)
+            hist(tmp,breaks=50)
+            ############################
+            cell_index=c(1:length(ori_data))
+            this_pch=rep(16,length(ori_data)) 
+            this_v_out = which( !(ori_data < UP & ori_data > DW ) )
+            this_pch[this_v_out]=3  
+            plot(ori_data, cell_index,  pch=this_pch, xlab='z_value', main='All')  #,xlim=c(DW,UP))
+            abline(v=UP,col='black',lty=3)
+            abline(v=DW,col='black',lty=3)
+            plot(ori_data, cell_index, pch=this_pch  ,xlim=c(DW,UP),xlab='z_value', main='No outlier')
+            abline(v=UP,col='black',lty=3)
+            abline(v=DW,col='black',lty=3)
+            ############################
+            p1p2=unlist(strsplit(this_row_label, ".And."))
+            p1=p1p2[1]
+            p2=p1p2[2]
+            p1_exp=t(exp_data[which(gene_name == p1),])
+            p2_exp=t(exp_data[which(gene_name == p2),])
+             
+            this_xlim = c(min(p1_exp),max(p1_exp))
+            this_ylim = c(min(p2_exp),max(p2_exp))
+            
+            this_v = which(p1_exp!=0 & p2_exp!=0)  
+            this_v_out = which( !(ori_data < UP & ori_data > DW ) )
+            this_col=rep('black',length(p1_exp))
+            this_col[this_v_out]='grey'
+            this_pch=rep(16,length(p1_exp))
+            this_pch[this_v_out]=3
+            this_pcc=round(cor(p1_exp[this_v], p2_exp[this_v]),2)
+            plot(p1_exp[this_v], p2_exp[this_v], xlab=p1, ylab=p2, xlim=this_xlim, ylim=this_ylim,main=paste0('All, N=',as.character(length(this_v)),', PCC=',as.character(this_pcc)),pch = this_pch[this_v] , col=this_col[this_v])
+
+            dev.off()
+            ###########Write files#################
+            #mix1.cluster=c(1:length(mix1$lambda))
+            #mix1.color=palette()[c(1:length(mix1$lambda))+1]
+            #tmp_out=cbind(mix1$lambda,mix1$mu,mix1$sigma,mix1.color,mix1.cluster)
+            #colnames(tmp_out)=c('lambda','mu','sigma','color','cluster')    
+            tmp_out='None'     
+            write.table(as.matrix(tmp_out),file=paste0(tmp_out_path,'.summary.txt'),sep='\t',quote=F,row.names=F,col.names=T)
+            
+            clust_out=cbind(COL_LABEL, ori_data, p1_exp, p2_exp)
+            colnames(clust_out)=c('Cell_name','Zvalue',p1,p2) 
+            write.table(as.matrix(clust_out),file=paste0(tmp_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
+            ############################
+            #OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
+            OUT=c(this_row_label, 0)
+            return(OUT)            
+            }
+        }  
     }
+#######################################
 
-
+#######################################
+#######################################
+#######################################
 RUN = mclapply(1:ROW_NUM, SINGLE, mc.cores=CPU)
+#######################################
+#######################################
+#######################################
+
 
 SECOND_LAMBDA=c('Tag','Second_Lambda')
 for(one in RUN){
@@ -249,8 +314,6 @@ while(i<=length(RANK_GENE)){
     RANK_GENE_KSP_NUM=c(RANK_GENE_KSP_NUM,length(this_rank_gene_second_lambda))
     i=i+1
     }
-
-
 
 names(RANK_GENE_KSP)=RANK_GENE
 RANK_GENE_KSP_NUM = RANK_GENE_KSP_NUM[order(RANK_GENE_KSP)]
@@ -325,7 +388,7 @@ OUT_HTML=c(OUT_HTML,'<table border="1", width="100%"><tr><td>NO.</td><td>Tag</td
 i=1
 while(i <=length(SC_OUT_SECOND_LAMBDA[,1])){
     this_tag = rownames(SC_OUT_SECOND_LAMBDA)[i]
-    second_lambda = OUT_SECOND_LAMBDA[i,1]
+    second_lambda = SC_OUT_SECOND_LAMBDA[i,1]
     this_out = paste0('<tr><td>',as.character(i),'</td><td>',this_tag,'</td><td>', as.character(second_lambda),'</td><td>','<a href="',this_tag,'.pdf"> pdf </a>','</td><td>' ,'<a href="',this_tag,'.summary.txt"> txt </a>','</td><td>',' <a href="',this_tag,'.cluster.txt"> txt </a></td> </tr>')
     OUT_HTML=c(OUT_HTML,this_out)
     i=i+1
