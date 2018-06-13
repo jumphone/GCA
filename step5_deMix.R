@@ -205,10 +205,10 @@ OUT_SECOND_LAMBDA=as.matrix(OUT_SECOND_LAMBDA)
 rownames(OUT_SECOND_LAMBDA) = SECOND_LAMBDA[c(2:length(SECOND_LAMBDA[,1])),1]
 
 O=order( OUT_SECOND_LAMBDA[,1], decreasing=T)
-OUT_SECOND_LAMBDA=OUT_SECOND_LAMBDA[O,]
+OUT_SECOND_LAMBDA=as.matrix(OUT_SECOND_LAMBDA[O,])
 #OUT_SECOND_LAMBDA=as.matrix(round(OUT_SECOND_LAMBDA,2))
-OUT_SECOND_LAMBDA=as.matrix(format(OUT_SECOND_LAMBDA,digits = 2, scientific = TRUE))
-write.table(OUT_SECOND_LAMBDA,file=paste0(TMP_DIR,'/Score_summary.txt'),sep='\t',quote=F,row.names=T,col.names=F )
+SC_OUT_SECOND_LAMBDA=as.matrix(format(OUT_SECOND_LAMBDA,digits = 2, scientific = TRUE))
+write.table(SC_OUT_SECOND_LAMBDA,file=paste0(TMP_DIR,'/Score_summary.txt'),sep='\t',quote=F,row.names=T,col.names=F )
 
 
 ####GENE_RANK##################
@@ -323,8 +323,8 @@ OUT_HTML=c(OUT_HTML,'<td width="5%" valign="top"></td>')
 OUT_HTML=c(OUT_HTML,'<td width="55%" valign="top">')
 OUT_HTML=c(OUT_HTML,'<table border="1", width="100%"><tr><td>NO.</td><td>Tag</td><td>Score</td><td>Figure</td><td>MixInfo</td><td>Cluster</td></tr>')
 i=1
-while(i <=length(OUT_SECOND_LAMBDA[,1])){
-    this_tag = rownames(OUT_SECOND_LAMBDA)[i]
+while(i <=length(SC_OUT_SECOND_LAMBDA[,1])){
+    this_tag = rownames(SC_OUT_SECOND_LAMBDA)[i]
     second_lambda = OUT_SECOND_LAMBDA[i,1]
     this_out = paste0('<tr><td>',as.character(i),'</td><td>',this_tag,'</td><td>', as.character(second_lambda),'</td><td>','<a href="',this_tag,'.pdf"> pdf </a>','</td><td>' ,'<a href="',this_tag,'.summary.txt"> txt </a>','</td><td>',' <a href="',this_tag,'.cluster.txt"> txt </a></td> </tr>')
     OUT_HTML=c(OUT_HTML,this_out)
