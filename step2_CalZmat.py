@@ -59,8 +59,10 @@ def SINGLE(p1, p2,p1_old_exp,p2_old_exp, p1_this_list, p2_this_list, pcc_old,pcc
             if p1_this * p2_this !=0: #>0: #and data.PCC_POOL[edge][1]>=5:
                 p1_new_exp=p1_old_exp+[p1_this]
                 p2_new_exp=p2_old_exp+[p2_this]
-                pcc_new = stats.pearsonr(p1_new_exp,p2_new_exp)[0]
-                #pcc = data.PCC_POOL[edge][0]
+                ####################################################
+                #pcc_new = stats.pearsonr(p1_new_exp,p2_new_exp)[0]
+                pcc_new = stats.spearmanr(p1_new_exp,p2_new_exp)[0]
+                ####################################################
                 delta_pcc = pcc_new - pcc_old
                 #z=delta_pcc /( (1-pcc**2)/float(data.PCC_POOL[edge][1]-1) )
                 z=delta_pcc /( (1-pcc_old**2)/float(pcc_length -1) )
