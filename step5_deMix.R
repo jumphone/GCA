@@ -206,7 +206,8 @@ rownames(OUT_SECOND_LAMBDA) = SECOND_LAMBDA[c(2:length(SECOND_LAMBDA[,1])),1]
 
 O=order( OUT_SECOND_LAMBDA[,1], decreasing=T)
 OUT_SECOND_LAMBDA=OUT_SECOND_LAMBDA[O,]
-OUT_SECOND_LAMBDA=as.matrix(round(OUT_SECOND_LAMBDA,2))
+#OUT_SECOND_LAMBDA=as.matrix(round(OUT_SECOND_LAMBDA,2))
+OUT_SECOND_LAMBDA=as.matrix(format(OUT_SECOND_LAMBDA,digits = 2, scientific = TRUE))
 write.table(OUT_SECOND_LAMBDA,file=paste0(TMP_DIR,'/Score_summary.txt'),sep='\t',quote=F,row.names=T,col.names=F )
 
 
@@ -272,7 +273,7 @@ while(i<=length(OUT_SECOND_LAMBDA[,1])){
     NET[i,2]=p2
     i=i+1}
 g <- make_graph(t(NET),directed = FALSE)
-colors <- colorRampPalette(c('blue','grey75','lightpink','indianred1',"red1", "red3", "red4",'darkred'))(51)
+colors <- colorRampPalette(c('blue','grey75','lightpink','indianred1','indianred3',"red1", "red2", "red3", "red4",'darkred'))(51)
 E(g)$color = colors[as.integer(OUT_SECOND_LAMBDA[,1] * 100)+1]
 
 node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
