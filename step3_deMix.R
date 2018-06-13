@@ -251,6 +251,14 @@ SINGLE = function(i){
             return(OUT)            
             }
         }  
+
+    this_med = median(t(input_data[i,])[which(!is.na(t(input_data[i,])))])
+    tmp_pos = abs(tmp[which(tmp-this_med>0)]-this_med)
+    tmp_neg = abs(tmp[which(tmp-this_med<0)]-this_med)
+    this_por=length(which(!is.na(t(input_data[i,]))))/length(t(input_data[i,]))
+    ks_bias_p=ks.test(tmp_pos,tmp_neg)$p.value
+    OUT=c(this_row_label, this_por*-log(ks_bias_p,2))
+    return(OUT) 
     }
 #######################################
 
