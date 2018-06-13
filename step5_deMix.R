@@ -311,7 +311,14 @@ while(i<=length(RANK_GENE)){
     this_rank_gene=RANK_GENE[i]
     this_rank_gene_second_lambda=as.numeric(SCORE_LIST[which(SCORE_LIST[,2]==this_rank_gene | SCORE_LIST[,3]==this_rank_gene),1])
     this_rank_gene_background_second_lambda=as.numeric(SCORE_LIST[which(SCORE_LIST[,2]!=this_rank_gene & SCORE_LIST[,3]!=this_rank_gene),1])
-    this_rank_gene_p = ks.test(this_rank_gene_background_second_lambda, this_rank_gene_second_lambda,alternative='greater')$p.value
+
+    this_rank_gene_second_lambda=this_rank_gene_second_lambda[which(this_rank_gene_second_lambda!=0)]
+    this_rank_gene_background_second_lambda=this_rank_gene_background_second_lambda[which(this_rank_gene_background_second_lambda!=0)]
+
+    if(length(this_rank_gene_second_lambda)>0 & length(this_rank_gene_background_second_lambda)>0) {
+        this_rank_gene_p = ks.test(this_rank_gene_background_second_lambda, this_rank_gene_second_lambda,alternative='greater')$p.value
+        }
+    else{this_rank_gene_p=1}
     RANK_GENE_KSP=c(RANK_GENE_KSP,this_rank_gene_p)
     RANK_GENE_KSP_NUM=c(RANK_GENE_KSP_NUM,length(this_rank_gene_second_lambda))
     i=i+1
