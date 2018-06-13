@@ -4,7 +4,7 @@ library(Matrix)
 suppressPackageStartupMessages(library(edgeR))
 
 
-exp_data=read.table('10X_Tumor72017_matrix.txt.uniq.txt',header=T,row.names=1,sep='\t')
+exp_data=read.table('10X_Tumor72017_matrix.txt.uniq.txt',header=T,row.names=1,sep='\t',check.names=FALSE)
 EXP = CreateSeuratObject(raw.data = exp_data, min.cells = 3, min.genes=200)
 mito.genes <- grep(pattern = "^mt-", x = rownames(x = EXP@data), value = TRUE)
 percent.mito <- colSums(EXP@data[mito.genes, ]) / colSums(EXP@data)
