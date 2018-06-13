@@ -415,4 +415,4 @@ write.table(OUT_HTML,file=paste0(TMP_DIR,'/index.html'),sep='\t',quote=F,row.nam
 ############################
 
 
-
+save.image()
