@@ -57,8 +57,8 @@ SINGLE = function(i){
     tmp=tmp[which(tmp<UP & tmp >DW)]
     ############################################
     ###########Find peak#############
-    #D=density(tmp)
-    D=density(tmp, bw='SJ')
+    D=density(tmp)
+    #D=density(tmp, bw='SJ')
     PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
     MEAN=D$x[which(PEAK_PIT==1)]
     PEAK_NUM=length(which(PEAK_PIT==1))
