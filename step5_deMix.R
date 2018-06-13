@@ -84,7 +84,25 @@ SINGLE = function(i){
             abline(v=MEAN,col='red',lty=3)
             plot.mixEM(mix1,whichplots=2,breaks=50)
             COL=clust_out+1
- 
+
+            ############################  
+            all_cell_num = length(COL_LABEL)
+            this_tag_cell_num = length(tmp)
+            this_pie_data=c(1-this_tag_cell_num/all_cell_num)
+            this_pie_col=c(0)
+            mix_index=1
+            while(mix_index<=length(mix1$lambda)){
+                this_pie_data=c(this_pie_data, mix1$lambda[mix_index] * this_tag_cell_num/all_cell_num )
+                this_pie_col=c(this_pie_col,mix_index)
+                mix_index=mix_index+1}       
+            this_pie_col=this_pie_col+1
+            this_pie_col=palette()[this_pie_col]
+            this_pie_col[1]='grey80'
+            pie(this_pie_data, labels=as.character(round(this_pie_data,2)),col=this_pie_col, radius = 0.9, main='Proportion Estimation (All)')
+            ##############################        
+            pie(mix1$lambda, labels=as.character(round(mix1$lambda,2)),col=(c(1:length(mix1$lambda))+1), radius = 0.9, main='Proportion Estimation (nonNA)')
+            ################################
+            
             cell_index=c(1:length(ori_data))
             this_pch=rep(16,length(ori_data)) 
  
@@ -148,6 +166,7 @@ SINGLE = function(i){
                     }  
                 }
 
+
             dev.off()
             ############################
             ###########Write files#################
@@ -161,8 +180,8 @@ SINGLE = function(i){
             colnames(clust_out)=c('Cell_name','Zvalue','Color','Cluster',p1,p2) 
             write.table(as.matrix(clust_out),file=paste0(tmp_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
             ############################
-            
-            OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
+            #OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
+            OUT=c(this_row_label, length(tmp) * sort(mix1$lambda / length(COL_LABEL),decreasing=T)[2])
             return(OUT)
             }
         }
@@ -229,6 +248,9 @@ while(i<=length(RANK_GENE)){
     RANK_GENE_KSP_NUM=c(RANK_GENE_KSP_NUM,length(this_rank_gene_second_lambda))
     i=i+1
     }
+
+
+
 names(RANK_GENE_KSP)=RANK_GENE
 RANK_GENE_KSP_NUM = RANK_GENE_KSP_NUM[order(RANK_GENE_KSP)]
 RANK_GENE_KSP = RANK_GENE_KSP[order(RANK_GENE_KSP)]
@@ -250,7 +272,7 @@ while(i<=length(OUT_SECOND_LAMBDA[,1])){
     NET[i,2]=p2
     i=i+1}
 g <- make_graph(t(NET),directed = FALSE)
-colors <- colorRampPalette(c('blue','lightpink','indianred1',"red1", "red4"))(51)
+colors <- colorRampPalette(c('blue','grey75','lightpink','indianred1',"red1", "red3", "red4",'darkred'))(51)
 E(g)$color = colors[as.integer(OUT_SECOND_LAMBDA[,1] * 100)+1]
 
 node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
@@ -258,15 +280,15 @@ node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
 pdf(paste0(TMP_DIR,'/G.pdf'),width=20,height=20)
 plot( c(1:51)/100,c(1:51)/100, col=colors, ylab='Score', xlab='Score', pch=16,cex=5,lwd=5,type='p',main='Edge Color Key')
 
-l <- layout_with_fr(g)
-plot(main='All', g, layout=l, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+#l <- layout_with_fr(g)
+plot(main='All', g, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
 
 V(g)$comp <- components(g)$membership
 i=1
 while(i<=max(V(g)$comp)){
     this_subg = induced_subgraph(g,V(g)$comp==i)
-    l <- layout_with_fr(this_subg)
-    plot(main=paste0('SubGraph',as.character(i)),this_subg, layout=l, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+    #l <- layout_with_fr(this_subg)
+    plot(main=paste0('SubGraph',as.character(i)),this_subg, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
     i=i+1}
 dev.off()
 #######################
