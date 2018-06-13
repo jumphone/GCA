@@ -290,7 +290,9 @@ while(i<=max(V(g)$comp)){
     this_subg = induced_subgraph(g,V(g)$comp==i)
     #l <- layout_with_fr(this_subg)
     #plot(main=paste0('SubGraph',as.character(i)),this_subg, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
-    plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+    if(length(E(this_subg))>2){
+        plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+        }
     i=i+1}
 dev.off()
 #######################
