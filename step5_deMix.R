@@ -291,25 +291,27 @@ RANK_GENE=unique(RANK_GENE)
 
 RANK_GENE_KSP=c()
 RANK_GENE_KSP_NUM=c()
+
+SCORE_LIST=cbind(OUT_SECOND_LAMBDA[,1],OUT_SECOND_LAMBDA[,1],OUT_SECOND_LAMBDA[,1])
+j=1
+while(j<=length(OUT_SECOND_LAMBDA[,1])){
+    this_tag = rownames(OUT_SECOND_LAMBDA)[j]    
+    this_second_lambda = OUT_SECOND_LAMBDA[j,1]
+    p1p2=unlist(strsplit(this_tag, ".And."))
+    p1=p1p2[1]
+    p2=p1p2[2]
+    SCORE_LIST[j,2]=p1
+    SCORE_LIST[j,3]=p2
+    j=j+1
+    }
+
 i=1
 while(i<=length(RANK_GENE)){
+    print(i)
     this_rank_gene=RANK_GENE[i]
-    this_rank_gene_second_lambda=c()
-    this_rank_gene_background_second_lambda=c()
-    j=1
-    while(j<=length(OUT_SECOND_LAMBDA[,1])){
-        this_tag = rownames(OUT_SECOND_LAMBDA)[j]    
-        this_second_lambda = OUT_SECOND_LAMBDA[j,1]
-        p1p2=unlist(strsplit(this_tag, ".And."))
-        p1=p1p2[1]
-        p2=p1p2[2]
-        if(p1==this_rank_gene || p2==this_rank_gene){
-            this_rank_gene_second_lambda=c(this_rank_gene_second_lambda,this_second_lambda)
-            }else{this_rank_gene_background_second_lambda = c(this_rank_gene_background_second_lambda, this_second_lambda)
-            }        
-        j=j+1}
+    this_rank_gene_second_lambda=as.numeric(SCORE_LIST[which(SCORE_LIST[,2]==this_rank_gene | SCORE_LIST[,3]==this_rank_gene),1])
+    this_rank_gene_background_second_lambda=as.numeric(SCORE_LIST[which(SCORE_LIST[,2]!=this_rank_gene & SCORE_LIST[,3]!=this_rank_gene),1])
     this_rank_gene_p = ks.test(this_rank_gene_background_second_lambda, this_rank_gene_second_lambda,alternative='greater')$p.value
-    #this_rank_gene_p = wilcox.test(this_rank_gene_background_second_lambda, this_rank_gene_second_lambda,alternative='greater')$p.value
     RANK_GENE_KSP=c(RANK_GENE_KSP,this_rank_gene_p)
     RANK_GENE_KSP_NUM=c(RANK_GENE_KSP_NUM,length(this_rank_gene_second_lambda))
     i=i+1
@@ -336,7 +338,7 @@ while(i<=length(OUT_SECOND_LAMBDA[,1])){
     NET[i,2]=p2
     i=i+1}
 g <- make_graph(t(NET),directed = FALSE)
-colors <- colorRampPalette(c('blue','grey75','lightpink','indianred1','indianred3',"red1", "red2", "red3", "red4",'darkred'))(51)
+colors <- colorRampPalette(c('white','lightpink','indianred1',"red1", "red2", "red3", "red4",'darkred','darkred','darkred','darkred'))(51)
 E(g)$color = colors[as.integer(OUT_SECOND_LAMBDA[,1] * 100)+1]
 
 node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
