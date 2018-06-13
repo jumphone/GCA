@@ -114,8 +114,10 @@ for edge in EDGE:
                 p2_exp.append(exp_p2)
             i+=1
         if len(p1_exp)>=LEN_LIMIT:
+            ####################################################
             #pcc=stats.pearsonr(p1_exp,p2_exp)[0]
             pcc=stats.spearmanr(p1_exp,p2_exp)[0]
+            ####################################################
             if abs(pcc)!=1:
                 PCC_POOL[edge]=[pcc,float(len(p1_exp))]
                 NETGENE.add(p1)
