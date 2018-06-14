@@ -18,15 +18,15 @@ GenePlot(object = EXP, gene1 = "nUMI", gene2 = "nGene")
 dev.off()
 
 EXP=FilterCells(object = EXP, subset.names = c("nGene", "percent.mito"), low.thresholds = c(500, -Inf), high.thresholds = c(6000, 0.05))
-#EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
+EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
 
-raw_exp_data= as.matrix(EXP@data)
+#raw_exp_data= as.matrix(EXP@data)
 #tmm=edgeR::calcNormFactors(raw_exp_data)
 #exptmm=edgeR::cpm(raw_exp_data, lib.size = tmm * colSums(raw_exp_data))
-exptmm=edgeR::cpm(raw_exp_data, lib.size = colSums(raw_exp_data),normalized.lib.sizes=T)
-logexp <- log2(exptmm + 1)
+#exptmm=edgeR::cpm(raw_exp_data, lib.size = colSums(raw_exp_data),normalized.lib.sizes=T)
+#logexp <- log2(exptmm + 1)
 
-OUT=logexp 
+OUT=as.matrix(EXP@data)#logexp 
 write.table(file='normalized_exp.txt',OUT,row.names=T,col.names=T,quote=F,sep='\t')
 save(EXP, file = "Seurat_EXP.Robj")
 
