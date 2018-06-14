@@ -14,6 +14,7 @@ library(igraph)
 
 ########Pre-setting##############
 GRAPH_SCORE_CUTOFF=0.05
+MAX_CLUST_NUM=5
 ##########################
 
 
@@ -41,6 +42,42 @@ COL_NUM=length(input_data[1,])
 ROW_LABEL=rownames(input_data)
 COL_LABEL=colnames(input_data)
 ########################
+
+##########Get Background Distribution###################
+set.seed(RANDOM_SEED)
+getSL=function(n){
+    cutloc=sort(runif(n))
+    cutlen=c()
+    i=1
+    while(i<n){
+          cutlen=c(cutlen, cutloc[i+1]-cutloc[i])
+          i=i+1}
+    cutlen=c(cutlen,cutloc[1])
+    cutlen=c(cutlen,1-cutloc[n])
+    SL=sort(cutlen,decreasing=T)[2]
+    return(SL)
+    }
+
+HMAT=c()
+cutnum=1
+while(cutnum<MAX_CLUST_NUM){
+    H=c()
+    i=1
+    while(i<=10000){
+        H=c(H, getSL(cutnum))
+        H=sort(H)
+    i=i+1}
+    HMAT=cbind(HMAT,H)
+    cutnum=cutnum+1
+    }
+
+
+#########################################################
+
+
+
+
+
 
 ######Single Thread Funtion##################
 SINGLE = function(i){
@@ -71,7 +108,7 @@ SINGLE = function(i){
         PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
         MEAN=D$x[which(PEAK_PIT==1)]
         PEAK_NUM=length(which(PEAK_PIT==1))
-        if(PEAK_NUM>1 & PEAK_NUM<=5){
+        if(PEAK_NUM>1 & PEAK_NUM < MAX_CLUST_NUM+1){
             set.seed(RANDOM_SEED)
             tryCatch({
                 mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)  
