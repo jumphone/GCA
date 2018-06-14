@@ -1,7 +1,7 @@
 library(Seurat)
 library(dplyr)
 library(Matrix)
-suppressPackageStartupMessages(library(edgeR))
+#suppressPackageStartupMessages(library(edgeR))
 
 
 exp_data=read.table('10X_Tumor72017_matrix.txt.uniq.txt',header=T,row.names=1,sep='\t',check.names=FALSE)
