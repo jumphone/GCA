@@ -13,19 +13,20 @@ library(igraph)
 
 
 ########Pre-setting##############
-GRAPH_SCORE_CUTOFF=0.1
+#GRAPH_SCORE_CUTOFF=0.1
 MAX_CLUST_NUM=5
 ##########################
 
 
 ########Args############
-print('$1 EXP, $2 ZMAT, $3 OUT, $4 CPU, $5 SEED')
+print('$1 EXP, $2 ZMAT, $3 OUT, $4 CPU, $5 SEED, $6 PERCENT')
 args = commandArgs(trailingOnly=TRUE)
 REF=args[1]
 INPUT=args[2]
 OUTPUT=args[3]
 CPU=as.numeric(args[4])
 RANDOM_SEED=as.numeric(args[5])
+GRAPH_SCORE_CUTOFF=as.numeric(args[6])
 TMP_DIR=paste0(OUTPUT)
 system(paste0('mkdir ',TMP_DIR))
 names(args)=c('EXP','ZMAT','OUT','CPU','SEED')
