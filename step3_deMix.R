@@ -130,7 +130,7 @@ SINGLE = function(i){
 
     if(length(second_lambda_list)>0){
         #best_index=which(second_lambda_list==max(second_lambda_list))
-        best_index=which(sl_score_list==max(sl_score_list))
+        best_index=which(sl_score_list==max(sl_score_list))[1]
         bw=bw_list[best_index]
         D=density(tmp,bw)
         PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
