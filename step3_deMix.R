@@ -176,9 +176,9 @@ SINGLE = function(i){
             col_data[which(col_data > 2)]=2
             col_data=(col_data+2)*10+1
             col_data=as.integer(col_data)
-            col_key=colorRampPalette(c("blue","grey75", "red"))(41)
+            col_key=colorRampPalette(c("purple","grey80", "gold2"))(41)
             col_data_key=col_key[col_data]
-            plot(main='Z and EXP (Z color key, blue: -2; red: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
+            plot(main='Z and EXP (Z color key, purple: -2; gold: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
             ####################################
             
             this_v_out = which( !(ori_data < UP & ori_data > DW ) )
