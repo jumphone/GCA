@@ -13,7 +13,7 @@ library(igraph)
 
 
 ########Pre-setting##############
-GRAPH_SCORE_CUTOFF=0.05
+GRAPH_SCORE_CUTOFF=0.1
 MAX_CLUST_NUM=5
 ##########################
 
@@ -169,8 +169,18 @@ SINGLE = function(i){
 
             this_xlim = c(min(p1_exp),max(p1_exp))
             this_ylim = c(min(p2_exp),max(p2_exp))
-            
             this_v = which(p1_exp!=0 & p2_exp!=0)  
+            ###################################
+            col_data=ori_data[this_v]
+            col_data[which(col_data< -2)]=-2
+            col_data[which(col_data > 2)]=2
+            col_data=(col_data+2)*10+1
+            col_data=as.integer(col_data)
+            col_key=colorRampPalette(c("blue","grey75", "red"))(41)
+            col_data_key=col_key[col_data]
+            plot(main='Z and EXP (Z color key, blue: -2; red: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
+            ####################################
+            
             this_v_out = which( !(ori_data < UP & ori_data > DW ) )
             this_col=rep('black',length(p1_exp))
             this_col[this_v_out]='grey'
@@ -398,7 +408,7 @@ while(i<=length(OVER_OUT_SECOND_LAMBDA[,1])){
     i=i+1}
 g <- make_graph(t(NET),directed = FALSE)
 #########################
-colors <- colorRampPalette(c('white','grey95','lightpink','indianred1',"red1", "red2", "red3", "red4",'darkred','darkred','darkred','darkred'))(51)
+colors <- colorRampPalette(c('white','grey95','lightpink','indianred1',"red1", "red3", "red4",'darkred','darkred','darkred'))(51)
 E(g)$color = colors[as.integer(OVER_OUT_SECOND_LAMBDA[,1] * 100)+1]
 node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
 pdf(paste0(TMP_DIR,'/G.pdf'),width=20,height=20)
