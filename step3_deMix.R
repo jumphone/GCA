@@ -73,11 +73,13 @@ SINGLE = function(i){
         PEAK_NUM=length(which(PEAK_PIT==1))
         if(PEAK_NUM>1 & PEAK_NUM<=5){
             set.seed(RANDOM_SEED)
-            mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)  
-            second_lambda=sort(mix1$lambda,decreasing=T)[2]
-            bw_list=c(bw_list,bw)
-            peak_num_list=c(peak_num_list,PEAK_NUM)
-            second_lambda_list=c(second_lambda_list,second_lambda)
+            tryCatch({
+                mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)  
+                second_lambda=sort(mix1$lambda,decreasing=T)[2]
+                bw_list=c(bw_list,bw)
+                peak_num_list=c(peak_num_list,PEAK_NUM)
+                second_lambda_list=c(second_lambda_list,second_lambda)
+                },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
             }
         bw=bw+0.01}
 
