@@ -71,7 +71,12 @@ while(cutnum<MAX_CLUST_NUM){
     cutnum=cutnum+1
     }
 
-
+getSLScore=function(peak_num, p){
+    cutnum=peak_num-1
+    thisH=HMAT[,cutnum]
+    score=ecdf(thisH)(p)
+    return(score)
+    }
 #########################################################
 
 
@@ -101,6 +106,7 @@ SINGLE = function(i){
     bw_list=c()
     second_lambda_list=c()
     peak_num_list=c()
+    sl_score_list=c()
     #mix_list=list()
     bw=0.05
     while(bw < 0.21){       
@@ -108,6 +114,7 @@ SINGLE = function(i){
         PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
         MEAN=D$x[which(PEAK_PIT==1)]
         PEAK_NUM=length(which(PEAK_PIT==1))
+        
         if(PEAK_NUM>1 & PEAK_NUM < MAX_CLUST_NUM+1){
             set.seed(RANDOM_SEED)
             tryCatch({
@@ -116,12 +123,14 @@ SINGLE = function(i){
                 bw_list=c(bw_list,bw)
                 peak_num_list=c(peak_num_list,PEAK_NUM)
                 second_lambda_list=c(second_lambda_list,second_lambda)
+                sl_score_list=c(sl_score_list, getSLScore(PEAK_NUM,second_lambda))
                 },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
             }
         bw=bw+0.01}
 
     if(length(second_lambda_list)>0){
-        best_index=which(second_lambda_list==max(second_lambda_list))
+        #best_index=which(second_lambda_list==max(second_lambda_list))
+        best_index=which(sl_score_list==max(sl_score_list))
         bw=bw_list[best_index]
         D=density(tmp,bw)
         PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
@@ -250,7 +259,9 @@ SINGLE = function(i){
             ############################
             if(length(mix1$lambda)>=2){
             #OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
-                OUT=c(this_row_label, length(tmp) * sort(mix1$lambda / length(COL_LABEL),decreasing=T)[2])
+                #OUT=c(this_row_label, length(tmp) * sort(mix1$lambda / length(COL_LABEL),decreasing=T)[2])
+                this_second_lambda=sort(mix1$lambda,decreasing=T)[2]
+                OUT=c(this_row_label, length(tmp)/length(COL_LABEL) * getSLScore(PEAK_NUM,this_second_lambda))
                 }
             else{OUT=c(this_row_label,0)}
             return(OUT)
