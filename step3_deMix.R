@@ -408,7 +408,7 @@ while(i<=length(OVER_OUT_SECOND_LAMBDA[,1])){
     i=i+1}
 g <- make_graph(t(NET),directed = FALSE)
 #########################
-colors <- colorRampPalette(c('white','white','white','grey95','lightpink','indianred1',"red1", "red3", "red4",'darkred','darkred','darkred'))(51)
+colors <- colorRampPalette(c('white','white','grey95','lightpink','indianred1',"red1", "red3", "red4",'darkred','darkred','darkred'))(51)
 E(g)$color = colors[as.integer(OVER_OUT_SECOND_LAMBDA[,1] * 100)+1]
 node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
 pdf(paste0(TMP_DIR,'/G.pdf'),width=20,height=20)
