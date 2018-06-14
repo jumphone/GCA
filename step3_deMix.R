@@ -191,7 +191,7 @@ SINGLE = function(i){
             
 
             ############################
-            plot(p1_exp[this_v], p2_exp[this_v], xlab=p1, ylab=p2, xlim=this_xlim, ylim=this_ylim, main='With color', pch = this_pch[this_v] , col=this_col[this_v])
+            plot(p1_exp[this_v], p2_exp[this_v], xlab=p1, ylab=p2, xlim=this_xlim, ylim=this_ylim, main='With cluster color', pch = this_pch[this_v] , col=this_col[this_v])
             for(this_cluster_index in unique(clust_out[which(clust_out!=0)])){
                 tmp_cell_index = which(clust_out == this_cluster_index)
                 
