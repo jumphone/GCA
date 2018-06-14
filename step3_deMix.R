@@ -43,44 +43,8 @@ ROW_LABEL=rownames(input_data)
 COL_LABEL=colnames(input_data)
 ########################
 
-##########Get Background Distribution###################
-set.seed(RANDOM_SEED)
-getSL=function(n){
-    cutloc=sort(runif(n))
-    cutlen=c()
-    i=1
-    while(i<n){
-          cutlen=c(cutlen, cutloc[i+1]-cutloc[i])
-          i=i+1}
-    cutlen=c(cutlen,cutloc[1])
-    cutlen=c(cutlen,1-cutloc[n])
-    SL=sort(cutlen,decreasing=T)[2]
-    return(SL)
-    }
 
-HMAT=c()
-cutnum=1
-while(cutnum<MAX_CLUST_NUM){
-    H=c()
-    i=1
-    while(i<=10000){
-        H=c(H, getSL(cutnum))
-        H=sort(H)
-    i=i+1}
-    HMAT=cbind(HMAT,H)
-    cutnum=cutnum+1
-    }
-
-getSLScore=function(peak_num, p){
-    cutnum=peak_num-1
-    thisH=HMAT[,cutnum]
-    score=ecdf(thisH)(p)
-    return(score)
-    }
 #########################################################
-
-
-
 
 
 
@@ -108,7 +72,7 @@ SINGLE = function(i){
     peak_num_list=c()
     sl_score_list=c()
     #mix_list=list()
-    bw=0.05
+    bw=0.01
     while(bw < 0.21){       
         D=density(tmp,bw)
         PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
@@ -123,7 +87,8 @@ SINGLE = function(i){
                 bw_list=c(bw_list,bw)
                 peak_num_list=c(peak_num_list,PEAK_NUM)
                 second_lambda_list=c(second_lambda_list,second_lambda)
-                sl_score_list=c(sl_score_list, getSLScore(PEAK_NUM,second_lambda))
+                #sl_score_list=c(sl_score_list, getSLScore(PEAK_NUM,second_lambda))
+                sl_score_list=c(sl_score_list, second_lambda)
                 },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
             }
         bw=bw+0.01}
@@ -261,7 +226,8 @@ SINGLE = function(i){
             #OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
                 #OUT=c(this_row_label, length(tmp) * sort(mix1$lambda / length(COL_LABEL),decreasing=T)[2])
                 this_second_lambda=sort(mix1$lambda,decreasing=T)[2]
-                OUT=c(this_row_label, length(tmp)/length(COL_LABEL) * getSLScore(PEAK_NUM,this_second_lambda))
+                OUT=c(this_row_label,length(tmp) / length(COL_LABEL) *this_second_lambda )
+                #OUT=c(this_row_label, length(tmp)/length(COL_LABEL) * getSLScore(PEAK_NUM,this_second_lambda))
                 }
             else{OUT=c(this_row_label,0)}
             return(OUT)
