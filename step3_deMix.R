@@ -66,7 +66,7 @@ SINGLE = function(i){
     peak_num_list=c()
     #mix_list=list()
     bw=0.05
-    while(bw<=0.2){       
+    while(bw < 0.21){       
         D=density(tmp,bw)
         PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
         MEAN=D$x[which(PEAK_PIT==1)]
