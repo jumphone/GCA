@@ -10,5 +10,5 @@ RSCRIPT="Rscript"
 
 $PYTHON step1_BuildIndex.py $NET_FILE $NORM_EXP $OUTPUT\.data $PERCENT
 $PYTHON step2_CalZmat.py $OUTPUT\.data $OUTPUT\.data.zmat $CPU
-$RSCRIPT step3_deMix.R $NORM_EXP $OUTPUT\.data.zmat $OUTPUT\.data.zmat.gca_result $CPU $SEED
+$RSCRIPT step3_deMix.R $NORM_EXP $OUTPUT\.data.zmat $OUTPUT\.data.zmat.gca_result $CPU $SEED $PERCENT
 
