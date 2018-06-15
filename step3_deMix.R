@@ -77,17 +77,13 @@ SINGLE = function(i){
     ############################################
     #########Test Sym#############
     #tmp_pos = abs(tmp[which(tmp-tmp_med>0)]-tmp_med)
-    #tmp_neg = abs(tmp[which(tmp-tmp_med<0)]-tmp_med)
-    
+    #tmp_neg = abs(tmp[which(tmp-tmp_med<0)]-tmp_med)   
     #ks_bias_p=1.0
     #tryCatch({ks_bias_p=ks.test(tmp_pos,tmp_neg)$p.value},error=function(e){cat("Catch :",conditionMessage(e),"\n")})
-    
-    
     ###########################################
     #if(ks_bias_p < SYM_BIAS_CUTOFF){ 
     if(1==1){ 
-        ###########Find peak#############
-    
+        ###########Find peak#############  
         bw_list=c()
         second_lambda_list=c()
         peak_num_list=c()
@@ -108,7 +104,6 @@ SINGLE = function(i){
                     bw_list=c(bw_list,bw)
                     peak_num_list=c(peak_num_list,PEAK_NUM)
                     second_lambda_list=c(second_lambda_list,second_lambda)
-                #sl_score_list=c(sl_score_list, getSLScore(PEAK_NUM,second_lambda))
                     sl_score_list=c(sl_score_list, second_lambda)
                     },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
                 }
