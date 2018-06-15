@@ -96,8 +96,8 @@ SINGLE = function(i){
                     peak_num_list=c(peak_num_list,PEAK_NUM)
                     second_lambda_list=c(second_lambda_list,second_lambda)
                     #############################
-                    #sl_score_list=c(sl_score_list, second_lambda)
-                    sl_score_list=c(sl_score_list, second_lambda - (1-first_lambda-second_lambda))
+                    sl_score_list=c(sl_score_list, second_lambda)
+                    #sl_score_list=c(sl_score_list, second_lambda - (1-first_lambda-second_lambda))
                     #############################
                     },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
                 }
