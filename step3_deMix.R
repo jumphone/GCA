@@ -16,6 +16,7 @@ library(igraph)
 #GRAPH_SCORE_CUTOFF=0.1
 #SYM_BIAS_CUTOFF=0.05
 MAX_CLUST_NUM=5
+MIN_BW=0.01
 MAX_BW=0.2
 BW_STEP=0.01
 ##########################
@@ -90,7 +91,7 @@ SINGLE = function(i){
         peak_num_list=c()
         sl_score_list=c()
         #mix_list=list()
-        bw=BW_STEP
+        bw=MIN_BW
         while(bw < MAX_BW+BW_STEP){       
             D=density(tmp,bw)
             PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
