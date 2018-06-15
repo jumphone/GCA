@@ -29,7 +29,7 @@ RANDOM_SEED=as.numeric(args[5])
 GRAPH_SCORE_CUTOFF=as.numeric(args[6])
 TMP_DIR=paste0(OUTPUT)
 system(paste0('mkdir ',TMP_DIR))
-names(args)=c('EXP','ZMAT','OUT','CPU','SEED')
+names(args)=c('EXP','ZMAT','OUT','CPU','SEED','CUTOFF')
 write.table(args, file=paste0(TMP_DIR,'/Arguments.txt'),sep='\t',quote=F,row.names=T, col.names=F )
 ########################
 
