@@ -91,10 +91,14 @@ SINGLE = function(i){
                 tryCatch({
                     mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)  
                     second_lambda=sort(mix1$lambda,decreasing=T)[2]
+                    first_lambda=sort(mix1$lambda,decreasing=T)[1]
                     bw_list=c(bw_list,bw)
                     peak_num_list=c(peak_num_list,PEAK_NUM)
                     second_lambda_list=c(second_lambda_list,second_lambda)
-                    sl_score_list=c(sl_score_list, second_lambda)
+                    #############################
+                    #sl_score_list=c(sl_score_list, second_lambda)
+                    sl_score_list=c(sl_score_list, second_lambda - (1-first_lambda-second_lambda))
+                    #############################
                     },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
                 }
         bw=bw+BW_STEP}
