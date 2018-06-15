@@ -14,8 +14,8 @@ library(igraph)
 
 ########Pre-setting##############
 #GRAPH_SCORE_CUTOFF=0.1
+#SYM_BIAS_CUTOFF=0.05
 MAX_CLUST_NUM=5
-SYM_BIAS_CUTOFF=0.05
 MAX_BW=0.2
 BW_STEP=0.01
 ##########################
