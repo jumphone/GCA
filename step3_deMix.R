@@ -73,15 +73,16 @@ SINGLE = function(i){
     run_flag=1
     ############################################
     #########Test Sym#############
-    tmp_pos = abs(tmp[which(tmp-tmp_med>0)]-tmp_med)
-    tmp_neg = abs(tmp[which(tmp-tmp_med<0)]-tmp_med)
-    #this_por=length(which(!is.na(t(input_data[i,]))))/length(t(input_data[i,]))
-    ks_bias_p=1.0
-    tryCatch({ks_bias_p=ks.test(tmp_pos,tmp_neg)$p.value},error=function(e){cat("Catch :",conditionMessage(e),"\n")})
+    #tmp_pos = abs(tmp[which(tmp-tmp_med>0)]-tmp_med)
+    #tmp_neg = abs(tmp[which(tmp-tmp_med<0)]-tmp_med)
+    
+    #ks_bias_p=1.0
+    #tryCatch({ks_bias_p=ks.test(tmp_pos,tmp_neg)$p.value},error=function(e){cat("Catch :",conditionMessage(e),"\n")})
     
     
     ###########################################
-    if(ks_bias_p < SYM_BIAS_CUTOFF){ 
+    #if(ks_bias_p < SYM_BIAS_CUTOFF){ 
+    if(1==1){ 
         ###########Find peak#############
     
         bw_list=c()
