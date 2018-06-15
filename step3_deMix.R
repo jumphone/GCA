@@ -19,10 +19,6 @@ MAX_BW=0.2
 BW_STEP=0.01
 ##########################
 
-##########################
-#GRAPH_SCORE_CUTOFF=0.1
-#SYM_BIAS_CUTOFF=0.05
-###########################
 
 ########Args############
 print('$1 EXP, $2 ZMAT, $3 OUT, $4 CPU, $5 SEED, $6 PERCENT')
@@ -75,20 +71,14 @@ SINGLE = function(i){
     ##########################
     run_flag=1
     ############################################
-    #########Test Sym#############
-    #tmp_pos = abs(tmp[which(tmp-tmp_med>0)]-tmp_med)
-    #tmp_neg = abs(tmp[which(tmp-tmp_med<0)]-tmp_med)   
-    #ks_bias_p=1.0
-    #tryCatch({ks_bias_p=ks.test(tmp_pos,tmp_neg)$p.value},error=function(e){cat("Catch :",conditionMessage(e),"\n")})
-    ###########################################
-    #if(ks_bias_p < SYM_BIAS_CUTOFF){ 
+
     if(1==1){ 
         ###########Find peak#############  
         bw_list=c()
         second_lambda_list=c()
         peak_num_list=c()
         sl_score_list=c()
-        #mix_list=list()
+        
         bw=MIN_BW
         while(bw < MAX_BW+BW_STEP){       
             D=density(tmp,bw)
@@ -250,11 +240,10 @@ SINGLE = function(i){
             write.table(as.matrix(clust_out),file=paste0(tmp_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
             ############################
             if(length(mix1$lambda)>=2){
-            #OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
-                #OUT=c(this_row_label, length(tmp) * sort(mix1$lambda / length(COL_LABEL),decreasing=T)[2])
+            
                 this_second_lambda=sort(mix1$lambda,decreasing=T)[2]
                 OUT=c(this_row_label,length(tmp) / length(COL_LABEL) *this_second_lambda )
-                #OUT=c(this_row_label, length(tmp)/length(COL_LABEL) * getSLScore(PEAK_NUM,this_second_lambda))
+                
                 }
             else{OUT=c(this_row_label,0)}
             return(OUT)
@@ -316,10 +305,7 @@ SINGLE = function(i){
 
             dev.off()
             ###########Write files#################
-            #mix1.cluster=c(1:length(mix1$lambda))
-            #mix1.color=palette()[c(1:length(mix1$lambda))+1]
-            #tmp_out=cbind(mix1$lambda,mix1$mu,mix1$sigma,mix1.color,mix1.cluster)
-            #colnames(tmp_out)=c('lambda','mu','sigma','color','cluster')    
+               
             tmp_out='None'     
             write.table(as.matrix(tmp_out),file=paste0(tmp_out_path,'.summary.txt'),sep='\t',quote=F,row.names=F,col.names=T)
             
