@@ -15,6 +15,9 @@ library(igraph)
 ########Pre-setting##############
 #GRAPH_SCORE_CUTOFF=0.1
 MAX_CLUST_NUM=5
+SYM_BIAS_CUTOFF=0.05
+MAX_BW=0.2
+BW_STEP=0.01
 ##########################
 
 
@@ -58,6 +61,7 @@ SINGLE = function(i){
     
     ###########Remove NA and Outliers#############
     tmp=tmp[which(!is.na(tmp))]
+    tmp_med=median(tmp)
     IQR=quantile(tmp,0.75)-quantile(tmp,0.25)
     UP=quantile(tmp,0.75)+1.5*IQR
     DW=quantile(tmp,0.25)-1.5*IQR
@@ -65,63 +69,76 @@ SINGLE = function(i){
     ############################################
     tmp_out_path=paste0(TMP_DIR,'/',this_row_label)
     ori_data = t(input_data[i,])
+    ##########################
+    run_flag=1
     ############################################
-    ###########Find peak#############
-
-    bw_list=c()
-    second_lambda_list=c()
-    peak_num_list=c()
-    sl_score_list=c()
-    #mix_list=list()
-    bw=0.01
-    while(bw < 0.21){       
-        D=density(tmp,bw)
-        PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
-        MEAN=D$x[which(PEAK_PIT==1)]
-        PEAK_NUM=length(which(PEAK_PIT==1))
+    #########Test Sym#############
+    tmp_pos = abs(tmp[which(tmp-tmp_med>0)]-tmp_med)
+    tmp_neg = abs(tmp[which(tmp-tmp_med<0)]-tmp_med)
+    #this_por=length(which(!is.na(t(input_data[i,]))))/length(t(input_data[i,]))
+    ks_bias_p=1.0
+    tryCatch({ks_bias_p=ks.test(tmp_pos,tmp_neg)$p.value},error=function(e){cat("Catch :",conditionMessage(e),"\n")})
+    
+    
+    ###########################################
+    if(ks_bias_p < SYM_BIAS_CUTOFF){ 
+        ###########Find peak#############
+    
+        bw_list=c()
+        second_lambda_list=c()
+        peak_num_list=c()
+        sl_score_list=c()
+        #mix_list=list()
+        bw=BW_STEP
+        while(bw < MAX_BW+BW_STEP){       
+            D=density(tmp,bw)
+            PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
+            MEAN=D$x[which(PEAK_PIT==1)]
+            PEAK_NUM=length(which(PEAK_PIT==1))
         
-        if(PEAK_NUM>1 & PEAK_NUM < MAX_CLUST_NUM+1){
-            set.seed(RANDOM_SEED)
-            tryCatch({
-                mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)  
-                second_lambda=sort(mix1$lambda,decreasing=T)[2]
-                bw_list=c(bw_list,bw)
-                peak_num_list=c(peak_num_list,PEAK_NUM)
-                second_lambda_list=c(second_lambda_list,second_lambda)
+            if(PEAK_NUM>1 & PEAK_NUM < MAX_CLUST_NUM+1){
+                set.seed(RANDOM_SEED)
+                tryCatch({
+                    mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)  
+                    second_lambda=sort(mix1$lambda,decreasing=T)[2]
+                    bw_list=c(bw_list,bw)
+                    peak_num_list=c(peak_num_list,PEAK_NUM)
+                    second_lambda_list=c(second_lambda_list,second_lambda)
                 #sl_score_list=c(sl_score_list, getSLScore(PEAK_NUM,second_lambda))
-                sl_score_list=c(sl_score_list, second_lambda)
-                },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
-            }
-        bw=bw+0.01}
-
-    if(length(second_lambda_list)>0){
-        #best_index=which(second_lambda_list==max(second_lambda_list))
-        best_index=which(sl_score_list==max(sl_score_list))[1]
-        bw=bw_list[best_index]
-        D=density(tmp,bw)
-        PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
-        MEAN=D$x[which(PEAK_PIT==1)]
-        PEAK_NUM=length(which(PEAK_PIT==1))
-        set.seed(RANDOM_SEED)
-        mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000) 
-        #plot.mixEM(mix1,whichplots=2,breaks=50)       
-        clust_out = rep(0,length(ori_data))
-        j=1
-        while(j<=length(ori_data)){
-            this_z = ori_data[j]
-            if(!is.na(this_z) & this_z < UP & this_z > DW){
-                this_d = dnorm(this_z, mean=mix1$mu, sd=mix1$sigma )*mix1$lambda
-                this_c=1
-                while(this_c <=length(this_d)){
-                    if(this_d[this_c] >=max(this_d)){clust_out[j]=this_c}
-                    this_c=this_c+1
-                    }                
+                    sl_score_list=c(sl_score_list, second_lambda)
+                    },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
                 }
-            j=j+1
-            }     
+        bw=bw+BW_STEP}
+
+        if(length(second_lambda_list)>0){
+            run_flag=0
+            #best_index=which(second_lambda_list==max(second_lambda_list))
+            best_index=which(sl_score_list==max(sl_score_list))[1]
+            bw=bw_list[best_index]
+            D=density(tmp,bw)
+            PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
+            MEAN=D$x[which(PEAK_PIT==1)]
+            PEAK_NUM=length(which(PEAK_PIT==1))
+            set.seed(RANDOM_SEED)
+            mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000) 
+            #plot.mixEM(mix1,whichplots=2,breaks=50)       
+            clust_out = rep(0,length(ori_data))
+            j=1
+            while(j<=length(ori_data)){
+                this_z = ori_data[j]
+                if(!is.na(this_z) & this_z < UP & this_z > DW){
+                    this_d = dnorm(this_z, mean=mix1$mu, sd=mix1$sigma )*mix1$lambda
+                    this_c=1
+                    while(this_c <=length(this_d)){
+                        if(this_d[this_c] >=max(this_d)){clust_out[j]=this_c}
+                        this_c=this_c+1
+                        }                
+                    }
+                j=j+1
+                }     
         ############################################
         #if(length(unique(clust_out[which(clust_out!=0)]))>1  ) { 
-        if(1==1){ 
+        
             ###########Draw figures#############
             pdf(paste0(tmp_out_path,'.pdf'),width=10,height=10)
             par(mfrow=c(2,2))
@@ -244,9 +261,13 @@ SINGLE = function(i){
             return(OUT)
             }
         }
-    else{
+    if(run_flag==1){
         if(1==1){
             #######draw#############
+            D=density(tmp,MAX_BW)
+            PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
+            MEAN=D$x[which(PEAK_PIT==1)]
+            PEAK_NUM=length(which(PEAK_PIT==1))
             pdf(paste0(tmp_out_path,'.pdf'),width=10,height=10)
             par(mfrow=c(2,2))
             plot(D,main=this_row_label)
@@ -274,6 +295,18 @@ SINGLE = function(i){
             this_ylim = c(min(p2_exp),max(p2_exp))
             
             this_v = which(p1_exp!=0 & p2_exp!=0)  
+
+            ###################################
+            col_data=ori_data[this_v]
+            col_data[which(col_data< -2)]=-2
+            col_data[which(col_data > 2)]=2
+            col_data=(col_data+2)*10+1
+            col_data=as.integer(col_data)
+            col_key=colorRampPalette(c("purple","grey80", "gold2"))(41)
+            col_data_key=col_key[col_data]
+            plot(main='Z and EXP (Z color key, purple: -2; gold: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
+            ####################################
+            
             this_v_out = which( !(ori_data < UP & ori_data > DW ) )
             this_col=rep('black',length(p1_exp))
             this_col[this_v_out]='grey'
@@ -300,14 +333,6 @@ SINGLE = function(i){
             return(OUT)            
             }
         }  
-
-    #this_med = median(t(input_data[i,])[which(!is.na(t(input_data[i,])))])
-    #tmp_pos = abs(tmp[which(tmp-this_med>0)]-this_med)
-    #tmp_neg = abs(tmp[which(tmp-this_med<0)]-this_med)
-    #this_por=length(which(!is.na(t(input_data[i,]))))/length(t(input_data[i,]))
-    #ks_bias_p=ks.test(tmp_pos,tmp_neg)$p.value
-    #OUT=c(this_row_label, this_por*-log(ks_bias_p,2))
-    #return(OUT) 
     }
 #######################################
 
@@ -475,7 +500,6 @@ write.table(OUT_HTML,file=paste0(TMP_DIR,'/index.html'),sep='\t',quote=F,row.nam
 ################
 save.image(file=paste0(TMP_DIR,'.saved_RData'))
 ################
-
 
 
 
