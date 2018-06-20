@@ -1,7 +1,7 @@
 library(Seurat)
 library(dplyr)
 library(Matrix)
-#suppressPackageStartupMessages(library(edgeR))
+suppressPackageStartupMessages(library(edgeR))
 
 
 exp_data=read.table('10X_Tumor72017_matrix.txt.uniq.txt',header=T,row.names=1,sep='\t',check.names=FALSE)
@@ -18,15 +18,15 @@ GenePlot(object = EXP, gene1 = "nUMI", gene2 = "nGene")
 dev.off()
 
 EXP=FilterCells(object = EXP, subset.names = c("nGene", "percent.mito"), low.thresholds = c(500, -Inf), high.thresholds = c(6000, 0.05))
-EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
+#EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
 
-#raw_exp_data= as.matrix(EXP@data)
+raw_exp_data= as.matrix(EXP@data)
 #tmm=edgeR::calcNormFactors(raw_exp_data)
 #exptmm=edgeR::cpm(raw_exp_data, lib.size = tmm * colSums(raw_exp_data))
-#exptmm=edgeR::cpm(raw_exp_data, lib.size = colSums(raw_exp_data),normalized.lib.sizes=T)
-#logexp <- log2(exptmm + 1)
-
-OUT=as.matrix(EXP@data)#logexp 
+exptmm=edgeR::cpm(raw_exp_data, lib.size = colSums(raw_exp_data),normalized.lib.sizes=T)
+logexp <- log2(exptmm + 1)
+#OUT=as.matrix(EXP@data)#logexp 
+OUT=logexp
 write.table(file='normalized_exp.txt',OUT,row.names=T,col.names=T,quote=F,sep='\t')
 save(EXP, file = "Seurat_EXP.Robj")
 
