@@ -12,7 +12,7 @@ print '''
 $1 NETWORK_PATH (col1: gene; col2: gene)
 $2 EXP_POOL_PATH (row1: header; col 1: gene_name; other_cols: exp value)
 $3 OUT_DATA_PATH
-$4 PERCENT
+$4 RATE
 '''
 
 NETWORK_PATH=sys.argv[1]
