@@ -21,7 +21,7 @@ BW_STEP=0.01
 
 
 ########Args############
-print('$1 EXP, $2 ZMAT, $3 OUT, $4 CPU, $5 SEED, $6 PERCENT')
+print('$1 EXP, $2 ZMAT, $3 OUT, $4 CPU, $5 SEED, $6 CUTOFF')
 args = commandArgs(trailingOnly=TRUE)
 REF=args[1]
 INPUT=args[2]
