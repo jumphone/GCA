@@ -18,13 +18,13 @@ Requirements:
     
     Python packages: scipy
     
-R packages: stringr, pastecs, mixtools, igraph
+    R packages: stringr, pastecs, mixtools, igraph
 
 Command options:
 
 i) Expression index building (Python script)
 
-python | step1_BuildIndex.py | NETWORK | EXP | OUTPUT_INDEX | RATE
+    python | step1_BuildIndex.py | NETWORK | EXP | OUTPUT_INDEX | RATE
 
     NETWORK: a list of tab-delimited gene pairs
     
@@ -36,7 +36,7 @@ python | step1_BuildIndex.py | NETWORK | EXP | OUTPUT_INDEX | RATE
 
 ii) Cell-specific network building (Python script)
 
-python | step2_CalZmat.py | OUTPUT_INDEX | OUTPUT_ZMAT | CPU
+    python | step2_CalZmat.py | OUTPUT_INDEX | OUTPUT_ZMAT | CPU
     
     OUTPUR_INDEX: the index file generated in the first step
     
@@ -46,7 +46,7 @@ python | step2_CalZmat.py | OUTPUT_INDEX | OUTPUT_ZMAT | CPU
 
 iii) Mixture models analyzing and result generating (R script).
 
-Rscript | step3_deMix.R | EXP | OUTPUT_ZMAT | OUTPUT | CPU | SEED | CUTOFF
+    Rscript | step3_deMix.R | EXP | OUTPUT_ZMAT | OUTPUT | CPU | SEED | CUTOFF
     
     EXP: the expression matrix used in the first step
 
