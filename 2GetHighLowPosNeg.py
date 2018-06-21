@@ -4,7 +4,7 @@ ACT_FLAG='Activation'
 REP_FLAG='Repression'
 
 #TF_TG_FILE='TF_EGFR.info.txt'
-TF_TG_FILE='trrust_rawdata.human.tsv.stem'
+TF_TG_FILE='trrust_rawdata.human.tsv.tgstem'
 GCA_OUTPUT='GSE70630'
 EDGE_SCORE_CUTOFF=0.01
 
@@ -56,16 +56,22 @@ def SINGLE(this_edge, this_tf, this_tg, this_mode,output_file):
     fi=open(edge_mix_file)
     fi.readline()
     info_list=[]
+    lambda_list=[]
     for line in fi:
         seq=line.rstrip().split('\t')
-        info_list.append([float(seq[1]),seq[4]]) 
+        info_list.append([float(seq[1]),seq[4],float(seq[0]) ]) 
+        lambda_list.append(float(seq[0]))
     info_list.sort()
+    tf_pos_clust='-1'
     if this_mode==1:
-        tf_pos_clust = info_list[-1][1]
+        #if info_list[-1][2] !=max(lambda_list):
+            tf_pos_clust = info_list[-1][1]
         #tf_neg_clust = info_list[0][1]
     elif this_mode==-1:
-        tf_pos_clust = info_list[0][1]
+        #if info_list[0][2] !=max(lambda_list):
+            tf_pos_clust = info_list[0][1]
         #tf_neg_clust = info_list[-1][1]
+    
     fi.close()
 
     #print tf_pos_clust,tf_neg_clust
@@ -132,8 +138,12 @@ for this_edge in EDGE_SCORE:
           this_tf=p1
           this_tg=p2
           this_mode=TFTG[p1][p2]
-          output_file=OUTPUT+'/'+'TF_'+p1+'.TG_'+p2+'.mode.txt'
-          fo.write(OUTPUT+'/'+'TF_'+p1+'.TG_'+p2+'.mode.txt\n')
+          if this_mode==1:
+              mode_tag='A'
+          else:
+              mode_tag='R'
+          output_file=OUTPUT+'/'+'TF_'+p1+'.TG_'+p2+'.mode.'+str(mode_tag)+'.txt'
+          fo.write(OUTPUT+'/'+'TF_'+p1+'.TG_'+p2+'.mode.'+str(mode_tag)+'.txt\n')
           SINGLE(this_edge, this_tf, this_tg, this_mode,output_file)
 
     if p2 in TFTG:
@@ -141,8 +151,12 @@ for this_edge in EDGE_SCORE:
           this_tf=p2
           this_tg=p1
           this_mode=TFTG[p2][p1]
-          output_file=OUTPUT+'/'+'TF_'+p2+'.TG_'+p1+'.mode.txt'
-          fo.write(OUTPUT+'/'+'TF_'+p2+'.TG_'+p1+'.mode.txt\n')
+          if this_mode==1:
+              mode_tag='A'
+          else:
+              mode_tag='R'
+          output_file=OUTPUT+'/'+'TF_'+p2+'.TG_'+p1+'.mode.'+str(mode_tag)+'.txt'
+          fo.write(OUTPUT+'/'+'TF_'+p2+'.TG_'+p1+'.mode.'+str(mode_tag)+'.txt\n')
           SINGLE(this_edge, this_tf, this_tg, this_mode,output_file)
 
 
