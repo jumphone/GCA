@@ -6,7 +6,7 @@ TFTG={}
 
 for line in fi:
     input_file=line.rstrip()
-    tag='TF_'+input_file.split('TF_')[1].split('.mode')[0]
+    tag='TF_'+input_file.split('TF_')[1].split('.txt')[0]
     tag=tag.replace('_','.')
     #print tag
     ftmp=open(input_file)
