@@ -63,13 +63,16 @@ abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
 
-plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50))
+
+COL=rep('black',length(neg_log_2_adjp))
+COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
+
+plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL)
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
 
-O=order(med_stem_score,decreasing=T)
-plot(med_stem_score[O],ylim=c(-1,1),pch=16)
+
 
 
 
@@ -91,10 +94,13 @@ TSNEPlot(object = EXP,do.label=T)
 VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 plot(med_stem_score[O],pch=16)
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey90", col.high = "red",cex.row=6 )
-plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50))
+
+
+plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL)
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
+
 dev.off()
 
 
