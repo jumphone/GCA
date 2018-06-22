@@ -64,11 +64,11 @@ def SINGLE(this_edge, this_tf, this_tg, this_mode,output_file):
     info_list.sort()
     tf_pos_clust='-1'
     if this_mode==1:
-        #if info_list[-1][2] !=max(lambda_list):
+        if info_list[-1][2] !=max(lambda_list):
             tf_pos_clust = info_list[-1][1]
         #tf_neg_clust = info_list[0][1]
     elif this_mode==-1:
-        #if info_list[0][2] !=max(lambda_list):
+        if info_list[0][2] !=max(lambda_list):
             tf_pos_clust = info_list[0][1]
         #tf_neg_clust = info_list[-1][1]
     
