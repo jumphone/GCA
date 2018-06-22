@@ -45,31 +45,37 @@ VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 
 
 med_stem_score=c()
+wilcox_test_p=c()
+
 i=0
 while(i<length(table(EXP@ident))){
-
-med_stem_score=c(med_stem_score, mean(stem_score_b[which(EXP@ident==i)]))
+med_stem_score=c(med_stem_score, median(stem_score_b[which(EXP@ident==i)]))
+wilcox_test_p=c(wilcox_test_p,wilcox.test(stem_score_b[which(EXP@ident==i)],stem_score_b)$p.value ) 
 i=i+1
 }
 
-O=order(med_stem_score,decreasing=T)
-plot(med_stem_score[O],ylim=c(-1,1))
+neg_log_2_p=-log(wilcox_test_p,2)
+neg_log_2_adjp= -log(p.adjust(wilcox_test_p,method='fdr'),2)
 
-boxplot( 
-  stem_score_b[which(EXP@ident==4-1)], 
-  stem_score_b[which(EXP@ident==5-1)], 
-  stem_score_b[which(EXP@ident==2-1)], 
-  stem_score_b[which(EXP@ident==13-1)], 
-  stem_score_b[which(EXP@ident==8-1)], 
-  stem_score_b[which(EXP@ident==3-1)], 
-  stem_score_b[which(EXP@ident==6-1)], 
-  stem_score_b[which(EXP@ident==9-1)], 
-  stem_score_b[which(EXP@ident==10-1)], 
-  stem_score_b[which(EXP@ident==1-1)], 
-  stem_score_b[which(EXP@ident==7-1)], 
-  stem_score_b[which(EXP@ident==11-1)], 
-  stem_score_b[which(EXP@ident==12-1)], 
-    outline=F   )
+direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(stem_score_b)))
+
+plot(neg_log_2_p*direction,pch=16)
+abline(h=0)
+abline(h=-log(0.05,2),lty=3)
+abline(h=log(0.05,2),lty=3)
+
+plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50))
+abline(h=0)
+abline(h=-log(0.05,2),lty=3)
+abline(h=log(0.05,2),lty=3)
+
+
+
+O=order(med_stem_score,decreasing=T)
+
+plot(med_stem_score[O],ylim=c(-1,1),pch=16)
+
+
 
 
 
@@ -89,6 +95,10 @@ TSNEPlot(object = EXP,do.label=T)
 VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 plot(med_stem_score[O],pch=16)
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey90", col.high = "red",cex.row=6 )
+plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50))
+abline(h=0)
+abline(h=-log(0.05,2),lty=3)
+abline(h=log(0.05,2),lty=3)
 dev.off()
 
 
