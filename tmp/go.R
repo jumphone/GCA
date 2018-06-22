@@ -27,10 +27,13 @@ PCNUM=20
 EXP <- RunPCA(object = EXP, pc.genes = all_gene, do.print = TRUE, pcs.print = 1:5,    genes.print = 5, pcs.compute=PCNUM, maxit = 500, weight.by.var = FALSE )
 PCElbowPlot(object = EXP,num.pc=PCNUM)
 
-PCUSE=1:3
+EXP <- JackStraw(object = EXP, num.replicate = 100, display.progress = FALSE)
+JackStrawPlot(object = EXP, PCs = 1:PCNUM)
+
+PCUSE=1:18
 EXP = RunTSNE(object = EXP, dims.use = PCUSE, do.fast = TRUE,check_duplicates = FALSE )
 
-RES=0.2
+RES=0.3
 EXP <- FindClusters(object = EXP, reduction.type = "pca", dims.use = PCUSE,  resolution = RES, print.output = 0, save.SNN = TRUE,force.recalc =T)
 
 TSNEPlot(object = EXP,do.label=T)
@@ -43,4 +46,4 @@ library(dplyr)
 pbmc.markers <- FindAllMarkers(object = pbmc, only.pos = TRUE, min.pct = 0.1, thresh.use = 0.2)
 pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
 top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
-DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red" )
+DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
