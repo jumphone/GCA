@@ -7,7 +7,7 @@ a=as.matrix(read.table('MODE_MAT.txt',header=T,row.names=1))
 stem_score=read.table('stem_score.txt')[,2]
 
 SUM=apply(a,2,sum)
-B= which(SUM>=2)
+B= which(SUM>=10)
 b=a[,B]
 stem_score_b=stem_score[B]
 length(stem_score_b)
@@ -34,8 +34,11 @@ plotPCA(sce)
 
 sce <- sc3(sce, ks = 2:6, biology = TRUE,gene_filter = FALSE)
 
-save.image(file='SC3.Rdata')
+save(sce, file='SC3.Robj')
 
 sc3_interactive(sce)
 
+
+
+sc3_plot_consensus(sce, k = 3 )
 
