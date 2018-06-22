@@ -41,19 +41,19 @@ EXP <- FindClusters(object = EXP, reduction.type = "pca", dims.use = PCUSE,  res
 
 TSNEPlot(object = EXP,do.label=T)
 
-VlnPlot(object = EXP, features.plot = c('stem.score'))
+VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 
 
 med_stem_score=c()
 i=0
 while(i<length(table(EXP@ident))){
 
-med_stem_score=c(med_stem_score, median(stem_score_b[which(EXP@ident==i)]))
+med_stem_score=c(med_stem_score, mean(stem_score_b[which(EXP@ident==i)]))
 i=i+1
 }
 
 O=order(med_stem_score,decreasing=T)
-plot(med_stem_score[O])
+plot(med_stem_score[O],ylim=c(-1,1))
 
 boxplot( 
   stem_score_b[which(EXP@ident==4-1)], 
@@ -87,6 +87,7 @@ DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.k
 pdf('OUTPUT.pdf',width=15,height=15)
 TSNEPlot(object = EXP,do.label=T)
 VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
+plot(med_stem_score[O],pch=16)
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey90", col.high = "red",cex.row=6 )
 dev.off()
 
