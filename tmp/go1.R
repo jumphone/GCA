@@ -34,6 +34,8 @@ plotPCA(sce)
 
 sce <- sc3(sce, ks = 2:6, biology = TRUE,gene_filter = FALSE)
 
+save.image(file='SC3.Rdata')
+
 sc3_interactive(sce)
 
 
