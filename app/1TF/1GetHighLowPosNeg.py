@@ -1,12 +1,16 @@
 import numpy as np
+import subprocess
 
 ACT_FLAG='Activation'
 REP_FLAG='Repression'
 
-#TF_TG_FILE='TF_EGFR.info.txt'
+
 TF_TG_FILE='trrust_rawdata.human.tsv'
 GCA_OUTPUT='GSE70630'
 EDGE_SCORE_CUTOFF=0.01
+OUTPUT='MODE'
+
+subprocess.Popen('mkdir '+OUTPUT,shell=True).wait()
 
 ######################################
 ######################################
@@ -125,8 +129,6 @@ def SINGLE(this_edge, this_tf, this_tg, this_mode,output_file):
     fi.close()    
 
 ########################################
-
-OUTPUT='MODE'
 fo=open(OUTPUT+'.summary.txt','w')
 for this_edge in EDGE_SCORE:
     p1p2=this_edge.split('.And.')
