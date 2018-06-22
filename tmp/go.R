@@ -6,6 +6,7 @@ SUM=apply(a,2,sum)
 B= which(SUM>=2)
 b=a[,B]
 stem_score_b=stem_score[B]
+length(stem_score_b)
 
 RSUM=apply(b,1,sum)
 b=b[which(RSUM>0),]
@@ -27,10 +28,10 @@ PCNUM=20
 EXP <- RunPCA(object = EXP, pc.genes = all_gene, do.print = TRUE, pcs.print = 1:5,    genes.print = 5, pcs.compute=PCNUM, maxit = 500, weight.by.var = FALSE )
 PCElbowPlot(object = EXP,num.pc=PCNUM)
 
-EXP <- JackStraw(object = EXP, num.replicate = 100, display.progress = FALSE)
-JackStrawPlot(object = EXP, PCs = 1:PCNUM)
+#EXP <- JackStraw(object = EXP, num.replicate = 100, display.progress = FALSE)
+#JackStrawPlot(object = EXP, PCs = 1:PCNUM)
 
-PCUSE=1:18
+PCUSE=1:15
 EXP = RunTSNE(object = EXP, dims.use = PCUSE, do.fast = TRUE,check_duplicates = FALSE )
 
 RES=0.3
@@ -44,6 +45,6 @@ EXP@scale.data=as.matrix(EXP@data)
 pbmc=EXP
 library(dplyr)
 pbmc.markers <- FindAllMarkers(object = pbmc, only.pos = TRUE, min.pct = 0.1, thresh.use = 0.2)
-pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
-top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
+pbmc.markers %>% group_by(cluster) %>% top_n(20, avg_logFC)
+top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(20, avg_logFC)
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
