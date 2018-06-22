@@ -27,9 +27,6 @@ PCNUM=40
 EXP <- RunPCA(object = EXP, pc.genes = all_gene, do.print = TRUE, pcs.print = 1:5,    genes.print = 5, pcs.compute=PCNUM, maxit = 500, weight.by.var = FALSE )
 PCElbowPlot(object = EXP,num.pc=PCNUM)
 
-#EXP <- JackStraw(object = EXP, num.replicate = 100, display.progress = FALSE)
-#JackStrawPlot(object = EXP, PCs = 1:PCNUM)
-
 PCAPlot(object = EXP, dim.1 = 1, dim.2 = 2)
 
 PCUSE=1:10
@@ -67,13 +64,13 @@ abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
 
-plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL)
+plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3)
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
 
 
-
+TSNEPlot(object = EXP,do.label=T,label.size=10)
 
 
 
@@ -90,6 +87,7 @@ DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.k
 
 
 pdf('OUTPUT.pdf',width=15,height=15)
+
 TSNEPlot(object = EXP,do.label=T)
 VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 plot(med_stem_score[O],pch=16)
