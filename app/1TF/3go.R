@@ -10,7 +10,6 @@ length(stem_score_b)
 
 RSUM=apply(b,1,sum)
 b=b[which(RSUM>0),]
-#heatmap(b,Rowv=T,Colv=F,scale='row',labCol='',margins=c(10,10))
 all_gene=rownames(b)
 
 library(Seurat)
@@ -69,10 +68,7 @@ abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
 
-
-
 O=order(med_stem_score,decreasing=T)
-
 plot(med_stem_score[O],ylim=c(-1,1),pch=16)
 
 
@@ -88,7 +84,7 @@ pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
 top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
 
-#par(mfrow=c(2,2))
+
 
 pdf('OUTPUT.pdf',width=15,height=15)
 TSNEPlot(object = EXP,do.label=T)
