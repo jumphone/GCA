@@ -63,7 +63,7 @@ for(this_cluster in cluster_list){
         }
     
     
-    plot(main=as.character(this_cluster), g, vertex.label.cex=2,edge.width=1, vertex.size=5, vertex.label.dist=2, vertex.label.color = "black")
+    plot(main=as.character(this_cluster), g, vertex.label.cex=1.5,edge.width=1, vertex.size=10, vertex.label.dist=2, vertex.label.color = "black")
       
     }
 dev.off()
