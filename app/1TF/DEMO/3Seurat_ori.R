@@ -8,23 +8,29 @@ new_exp_data=exp_data[,which(colnames(exp_data) %in% tf_ident[,1])]
 
 EXP = CreateSeuratObject(raw.data = new_exp_data, min.cells = 0, min.genes=0)
 
-EXP <- AddMetaData(object = EXP, metadata = stem_score_b, col.name = "stem.score")
-EXP@meta.data$stem.score=stem_score_b
 
-EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
 
-EXP = ScaleData(object = EXP,, genes.use = all_gene)
 
-PCNUM=40
-EXP <- RunPCA(object = EXP, pc.genes = all_gene, do.print = TRUE, pcs.print = 1:5,    genes.print = 5, pcs.compute=PCNUM, maxit = 500, weight.by.var = FALSE )
-PCElbowPlot(object = EXP,num.pc=PCNUM)
+tmp_ident=tf_ident[,2]
+tmp_ident=as.factor(tmp_ident)
+names(tmp_ident)=names(EXP@ident)
+EXP@ident=tmp_ident
+head(EXP@ident)
 
-PCAPlot(object = EXP, dim.1 = 1, dim.2 = 2)
 
-PCUSE=1:10
-EXP = RunTSNE(object = EXP, dims.use = PCUSE, do.fast = TRUE,check_duplicates = FALSE )
 
-RES=0.6
-EXP <- FindClusters(object = EXP, reduction.type = "pca", dims.use = PCUSE,  resolution = RES, print.output = 0, save.SNN = TRUE,force.recalc =T)
+pbmc=EXP
+library(dplyr)
+pbmc.markers <- FindAllMarkers(object = pbmc, only.pos = TRUE, min.pct = 0.25, thresh.use = 0.1)
 
-TSNEPlot(object = EXP,do.label=T)
+pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
+
+write.table(file='EXP_MARKER.txt', pbmc.markers,row.names=T,col.names=T,quote=F,sep='\t')
+
+top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
+DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
+
+
+
+
+
