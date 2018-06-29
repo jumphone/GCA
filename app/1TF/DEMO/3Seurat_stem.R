@@ -43,7 +43,7 @@ RES=0.6
 EXP <- FindClusters(object = EXP, reduction.type = "pca", dims.use = PCUSE,  resolution = RES, print.output = 0, save.SNN = TRUE,force.recalc =T)
 
 TSNEPlot(object = EXP,do.label=T)
-
+write.table(file='IDENT.txt',EXP@ident,row.names=T,col.names=F,sep='\t',quote=F)
 #VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 
 
