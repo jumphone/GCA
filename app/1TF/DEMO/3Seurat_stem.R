@@ -1,11 +1,18 @@
 library(gplots)
 a=as.matrix(read.table('MODE_MAT.txt',header=T,row.names=1))
 stem_score=read.table('stem_score.txt')[,2]
+ac_score=read.table('AC_score.txt')[,2]
+oc_score=read.table('OC_score.txt')[,2]
+
 
 SUM=apply(a,2,sum)
 B= which(SUM>=3)
 b=a[,B]
+
 stem_score_b=stem_score[B]
+ac_score_b=ac_score[B]
+oc_score_b=oc_score[B]
+
 length(stem_score_b)
 
 RSUM=apply(b,1,sum)
