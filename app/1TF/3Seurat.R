@@ -50,8 +50,7 @@ DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.k
 pdf('OUTPUT.pdf',width=15,height=15)
 
 TSNEPlot(object = EXP,do.label=T)
-VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
-plot(med_stem_score[O],pch=16)
+
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey90", col.high = "red",cex.row=6 )
 dev.off()
 
