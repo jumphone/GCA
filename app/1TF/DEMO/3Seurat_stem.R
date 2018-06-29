@@ -46,6 +46,7 @@ TSNEPlot(object = EXP,do.label=T)
 
 #VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 
+COMBINE=c()
 
 pdf('STEM_AC_OC.pdf',width=10,height=10)
 
@@ -72,6 +73,8 @@ plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,m
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
+
+COMBINE=cbind(COMBINE,neg_log_2_adjp*direction)
 #################################
 
 ##########AC###########
@@ -97,6 +100,7 @@ plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='AC')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
+COMBINE=cbind(COMBINE,neg_log_2_adjp*direction)
 #################################
 
 ##########AC###########
@@ -122,6 +126,7 @@ plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='OC')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
+COMBINE=cbind(COMBINE,neg_log_2_adjp*direction)
 #################################
 dev.off()
 
