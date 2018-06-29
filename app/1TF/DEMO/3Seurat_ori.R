@@ -1,10 +1,12 @@
 library(gplots)
+library(Seurat)
 
 exp_data=as.matrix(read.table('GSE70630_OG_processed_data_v2.txt.cleaned.txt',header=T,row.names=1))
 tf_ident=read.table('IDENT.txt')
 
+new_exp_data=exp_data[,which(colnames(exp_data) %in% tf_ident[,1])]
 
-EXP = CreateSeuratObject(raw.data = b, min.cells = 0, min.genes=0)
+EXP = CreateSeuratObject(raw.data = new_exp_data, min.cells = 0, min.genes=0)
 
 EXP <- AddMetaData(object = EXP, metadata = stem_score_b, col.name = "stem.score")
 EXP@meta.data$stem.score=stem_score_b
