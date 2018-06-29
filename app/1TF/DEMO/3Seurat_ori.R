@@ -9,8 +9,6 @@ new_exp_data=exp_data[,which(colnames(exp_data) %in% tf_ident[,1])]
 EXP = CreateSeuratObject(raw.data = new_exp_data, min.cells = 0, min.genes=0)
 
 
-
-
 tmp_ident=tf_ident[,2]
 tmp_ident=as.factor(tmp_ident)
 names(tmp_ident)=names(EXP@ident)
@@ -28,8 +26,10 @@ pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
 write.table(file='EXP_MARKER.txt', pbmc.markers,row.names=T,col.names=T,quote=F,sep='\t')
 
 top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
-DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
 
+pdf('GENE_MARKER.pdf',width=15,height=15)
+DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
+dev.off()
 
 
 
