@@ -44,41 +44,88 @@ EXP <- FindClusters(object = EXP, reduction.type = "pca", dims.use = PCUSE,  res
 
 TSNEPlot(object = EXP,do.label=T)
 
-VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
+#VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 
 
+pdf('STEM_AC_OC.pdf',width=10,height=10)
+
+##########STEM###########
+stem_score_b=stem_score[B]
 med_stem_score=c()
 wilcox_test_p=c()
-
 i=0
 while(i<length(table(EXP@ident))){
 med_stem_score=c(med_stem_score, median(stem_score_b[which(EXP@ident==i)]))
 wilcox_test_p=c(wilcox_test_p,wilcox.test(stem_score_b[which(EXP@ident==i)],stem_score_b)$p.value ) 
 i=i+1
 }
-
 neg_log_2_p=-log(wilcox_test_p,2)
 neg_log_2_adjp= -log(p.adjust(wilcox_test_p,method='fdr'),2)
-
 direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(stem_score_b)))
-
-plot(neg_log_2_p*direction,pch=16)
-abline(h=0)
-abline(h=-log(0.05,2),lty=3)
-abline(h=log(0.05,2),lty=3)
-
-
+#plot(neg_log_2_p*direction,pch=16)
+#abline(h=0)
+#abline(h=-log(0.05,2),lty=3)
+#abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
-
-plot(neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3)
+plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,main='STEM')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
+#################################
 
+##########AC###########
+stem_score_b=ac_score_b
+med_stem_score=c()
+wilcox_test_p=c()
+i=0
+while(i<length(table(EXP@ident))){
+med_stem_score=c(med_stem_score, median(stem_score_b[which(EXP@ident==i)]))
+wilcox_test_p=c(wilcox_test_p,wilcox.test(stem_score_b[which(EXP@ident==i)],stem_score_b)$p.value ) 
+i=i+1
+}
+neg_log_2_p=-log(wilcox_test_p,2)
+neg_log_2_adjp= -log(p.adjust(wilcox_test_p,method='fdr'),2)
+direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(stem_score_b)))
+#plot(neg_log_2_p*direction,pch=16)
+#abline(h=0)
+#abline(h=-log(0.05,2),lty=3)
+#abline(h=log(0.05,2),lty=3)
+COL=rep('black',length(neg_log_2_adjp))
+COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
+plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='AC')
+abline(h=0)
+abline(h=-log(0.05,2),lty=3)
+abline(h=log(0.05,2),lty=3)
+#################################
+
+##########AC###########
+stem_score_b=oc_score_b
+med_stem_score=c()
+wilcox_test_p=c()
+i=0
+while(i<length(table(EXP@ident))){
+med_stem_score=c(med_stem_score, median(stem_score_b[which(EXP@ident==i)]))
+wilcox_test_p=c(wilcox_test_p,wilcox.test(stem_score_b[which(EXP@ident==i)],stem_score_b)$p.value ) 
+i=i+1
+}
+neg_log_2_p=-log(wilcox_test_p,2)
+neg_log_2_adjp= -log(p.adjust(wilcox_test_p,method='fdr'),2)
+direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(stem_score_b)))
+#plot(neg_log_2_p*direction,pch=16)
+#abline(h=0)
+#abline(h=-log(0.05,2),lty=3)
+#abline(h=log(0.05,2),lty=3)
+COL=rep('black',length(neg_log_2_adjp))
+COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
+plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='OC')
+abline(h=0)
+abline(h=-log(0.05,2),lty=3)
+abline(h=log(0.05,2),lty=3)
+#################################
+dev.off()
 
 TSNEPlot(object = EXP,do.label=T,label.size=10)
-
 
 
 
