@@ -46,10 +46,10 @@ TSNEPlot(object = EXP,do.label=T)
 
 #VlnPlot(object = EXP, features.plot = c('stem.score'),do.sort=T)
 
-COMBINE=c()
+
 
 pdf('STEM_AC_OC.pdf',width=10,height=10)
-
+COMBINE=c()
 ##########STEM###########
 stem_score_b=stem_score[B]
 med_stem_score=c()
@@ -103,7 +103,7 @@ abline(h=log(0.05,2),lty=3)
 COMBINE=cbind(COMBINE,neg_log_2_adjp*direction)
 #################################
 
-##########AC###########
+##########OC###########
 stem_score_b=oc_score_b
 med_stem_score=c()
 wilcox_test_p=c()
@@ -128,7 +128,28 @@ abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
 COMBINE=cbind(COMBINE,neg_log_2_adjp*direction)
 #################################
+
+NEW_COMBINE=COMBINE
+NEW_COMBINE[which(COMBINE> -log(0.05,2))]=1
+NEW_COMBINE[which(COMBINE > log(0.05,2) & COMBINE < -log(0.05,2))]=0
+NEW_COMBINE[which(COMBINE< log(0.05,2))]= 0
+#heatmap.2(NEW_COMBINE,scale='none')
+
+
+rownames(NEW_COMBINE)=as.character(c(0:12))
+colnames(NEW_COMBINE)=c('STEM','AC','OC')
+library('gplots')
+#heatmap.2(NEW_COMBINE,scale='none',trace='none',col=colorRampPalette(c('blue','grey80','red')),cexCol=1)
+NEW_NEW_COMBINE=NEW_COMBINE[,c(2,1,3)]
+NEW_NEW_COMBINE=NEW_NEW_COMBINE[c(5,7,11,4,1,3,0,2,6,8,10,9,12)+1,]
+
+#colnames(NEW_NEW_COMBINE)=c('AC','STEM','OC')
+heatmap.2(NEW_NEW_COMBINE,scale='none',trace='none',col=colorRampPalette(c('grey80','red')),cexCol=1,Colv=F,Rowv=F,dendrogram='none')
+
 dev.off()
+
+
+#################################
 
 TSNEPlot(object = EXP,do.label=T,label.size=10)
 
