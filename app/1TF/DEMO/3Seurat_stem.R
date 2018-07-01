@@ -42,15 +42,16 @@ EXP = RunTSNE(object = EXP, dims.use = PCUSE, do.fast = TRUE,check_duplicates = 
 RES=0.6
 EXP <- FindClusters(object = EXP, reduction.type = "pca", dims.use = PCUSE,  resolution = RES, print.output = 0, save.SNN = TRUE,force.recalc =T)
 
+########################################
 TAG=read.table('MODE_MAT.txt.tag')[,1]
 new_EXP=EXP
 TAG=as.factor(TAG)
 names(TAG)=names(new_EXP@ident)
 new_EXP@ident=TAG
 pdf('BATCH.pdf',width=7,height=7)
-TSNEPlot(object = new_EXP,do.label=T)
+TSNEPlot(object = new_EXP,do.label=F)
 dev.off()
-
+############################################################
 
 TSNEPlot(object = EXP,do.label=T)
 write.table(file='IDENT.txt',EXP@ident,row.names=T,col.names=F,sep='\t',quote=F)
