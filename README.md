@@ -61,13 +61,13 @@ iv) Get regulatory feature binary matrix (Python script)
     OUTPUT: the regulatory feature binary matrix
     
     
-# Introduction of GCA’s result
+# Result introduction
 
 The result summary HTML file named “index.html” locates in the output directory. A result demo is available at: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/index.html
 
 The left side of this page records the contribution score of each gene, and the right side presents the edge score of each gene pair.
 
-# Links:
+Links:
 
     “Graph” links to the gene graph that shows the path of genes that might contribute to the expression heterogeneity. 
     “Args” links to the txt file that records GCA running options 
