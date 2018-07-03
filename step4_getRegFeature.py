@@ -1,19 +1,22 @@
 import numpy as np
 import subprocess
+import sys
+
+
+
+###Config#######################################
 
 ACT_FLAG='Activation'
 REP_FLAG='Repression'
 EDGE_SCORE_CUTOFF=0.01
 
-
-
 ############################################
 
 print('$1 MODE, $2 GCA_OUTPUT, $3 OUTPUT')
-args = commandArgs(trailingOnly=TRUE)
-TF_TG_FILE = args[1]
-GCA_OUTPUT = args[2]
-OUTPUT=args[3]
+print('')
+TF_TG_FILE = sys.argv[1]
+GCA_OUTPUT = sys.argv[2]
+OUTPUT=sys.argv[3]
 
 ###############################
 
