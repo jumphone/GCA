@@ -1,7 +1,5 @@
 # GCA: Gene Correlation Analysis in Single-cell RNA-seq data
 
-![image](/image.png "image")
-
 Author: Feng Zhang
 
 Email: 15110700005@fudan.edu.cn
@@ -9,6 +7,8 @@ Email: 15110700005@fudan.edu.cn
 # Demo: 
 
 Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/index.html
+
+![image](/image.png "image")
 
 # Requirements:
 
