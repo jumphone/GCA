@@ -16,6 +16,8 @@ Requirements:
     Python packages: scipy    
     R packages: stringr, pastecs, mixtools, igraph
 
+Get normalized expression matrix: step0_normData.R
+
 Command options:
 
 i) Expression index building (Python script)
@@ -45,6 +47,15 @@ iii) Mixture models analyzing and result generating (R script).
     CPU: the number of threads to run GCA 
     SEED: seed for random function in R
     CUTOFF: the cutoff of edge score to draw the gene graph
+    
+iv) Get regulatory feature binary matrix (Python script).
+
+    python | step4_getRegFeature.py | MODE | GCA_OUTPUT | OUTPUT
+    
+    MODE: the MODE file of TRRUST (or your own file)
+    GCA_OUTPUT: the OUTPUT directory of GCA
+    OUTPUT: the regulatory feature binary matrix
+    
     
 # Introduction of GCA’s result
 
