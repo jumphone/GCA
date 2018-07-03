@@ -39,7 +39,7 @@ ii) Cell-specific network building (Python script)
     OUTPUT_ZMAT: the z-value matrix file name, given by the user   
     CPU: the number of threads to run GCA 
 
-iii) Mixture models analyzing and result generating (R script).
+iii) Mixture models analyzing and result generating (R script)
 
     Rscript | step3_deMix.R | EXP | OUTPUT_ZMAT | OUTPUT | CPU | SEED | CUTOFF
     
@@ -50,7 +50,7 @@ iii) Mixture models analyzing and result generating (R script).
     SEED: seed for random function in R
     CUTOFF: the cutoff of edge score to draw the gene graph
     
-iv) Get regulatory feature binary matrix (Python script).
+iv) Get regulatory feature binary matrix (Python script)
 
     python | step4_getRegFeature.py | MODE | GCA_OUTPUT | OUTPUT
     
