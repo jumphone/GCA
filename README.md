@@ -12,7 +12,7 @@ Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/ind
 
 # Requirements:
 
-    Operation system: Mac or Linux, python=2.7, R=3.5    
+    Operating system: Mac or Linux, python=2.7, R=3.5    
     Python packages: scipy    
     R packages: stringr, pastecs, mixtools, igraph
 
