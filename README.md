@@ -16,9 +16,9 @@ Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/ind
 
 # Tips:
 
-1. Get normalized expression matrix:  [sup1_normData.R](/GCA/sup1_normData.R) 
+1. Get normalized expression matrix:  [sup1_normData.R](/sup1_normData.R) 
 
-2. Downstream analysis of regulatory feature binary matrix: [sup2_Downstream.R](/GCA/sup2_Downstream.R)
+2. Downstream analysis of regulatory feature binary matrix: [sup2_Downstream.R](/sup2_Downstream.R)
 
 # Command options:
 
