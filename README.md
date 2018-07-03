@@ -56,7 +56,7 @@ iv) Get regulatory feature binary matrix (Python script)
 
     python | step4_getRegFeature.py | MODE | GCA_OUTPUT | OUTPUT
     
-    MODE: the MODE file of TRRUST (or your own file)
+    MODE: a list of tab-delimited gene pairs with regulatory mode information (TRRUST file or your own file in the same format)
     GCA_OUTPUT: the OUTPUT directory of GCA
     OUTPUT: the regulatory feature binary matrix
     
