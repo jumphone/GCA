@@ -22,7 +22,7 @@ Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/ind
 
 2. Downstream analysis of regulatory feature binary matrix: [sup2_Downstream.R](/sup2_Downstream.R)
 
-# Command options:
+# How to run GCA:
 
 i) Build expression index (Python script)
 
