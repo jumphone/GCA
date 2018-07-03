@@ -18,8 +18,8 @@ Requirements:
 
 Tips:
 
-    Get normalized expression matrix: sup1_normData.R
-    Downstream analysis of regulatory feature binary matrix: sup2_Downstream.R
+    Get normalized expression matrix: [sup1_normData.R](/GCA/sup1_normData.R)
+    Downstream analysis of regulatory feature binary matrix: [sup2_Downstream.R](/GCA/sup2_Downstream.R)
 
 Command options:
 
