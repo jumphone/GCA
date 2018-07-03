@@ -24,7 +24,8 @@ OUTPUT=sys.argv[3]
 #GCA_OUTPUT='GSE70630'
 #OUTPUT='MODE'
 
-subprocess.Popen('mkdir '+OUTPUT,shell=True).wait()
+OUTPUT_TMP=OUTPUT+'.TMP'
+subprocess.Popen('mkdir '+OUTPUT_TMP,shell=True).wait()
 
 ######################################
 ######################################
@@ -143,7 +144,7 @@ def SINGLE(this_edge, this_tf, this_tg, this_mode,output_file):
     fi.close()    
 
 ########################################
-fo=open(OUTPUT+'.summary.txt','w')
+fo=open(OUTPUT_TMP+'.summary.txt','w')
 for this_edge in EDGE_SCORE:
     p1p2=this_edge.split('.And.')
     p1=p1p2[0]
@@ -158,8 +159,8 @@ for this_edge in EDGE_SCORE:
               mode_tag='A'
           else:
               mode_tag='R'
-          output_file=OUTPUT+'/'+'TF_'+p1+'.TG_'+p2+'.mode.'+str(mode_tag)+'.txt'
-          fo.write(OUTPUT+'/'+'TF_'+p1+'.TG_'+p2+'.mode.'+str(mode_tag)+'.txt\n')
+          output_file=OUTPUT_TMP+'/'+'TF_'+p1+'.TG_'+p2+'.mode.'+str(mode_tag)+'.txt'
+          fo.write(OUTPUT_TMP+'/'+'TF_'+p1+'.TG_'+p2+'.mode.'+str(mode_tag)+'.txt\n')
           SINGLE(this_edge, this_tf, this_tg, this_mode,output_file)
 
     elif p2 in TFTG:
@@ -171,10 +172,58 @@ for this_edge in EDGE_SCORE:
               mode_tag='A'
           else:
               mode_tag='R'
-          output_file=OUTPUT+'/'+'TF_'+p2+'.TG_'+p1+'.mode.'+str(mode_tag)+'.txt'
-          fo.write(OUTPUT+'/'+'TF_'+p2+'.TG_'+p1+'.mode.'+str(mode_tag)+'.txt\n')
+          output_file=OUTPUT_TMP+'/'+'TF_'+p2+'.TG_'+p1+'.mode.'+str(mode_tag)+'.txt'
+          fo.write(OUTPUT_TMP+'/'+'TF_'+p2+'.TG_'+p1+'.mode.'+str(mode_tag)+'.txt\n')
           SINGLE(this_edge, this_tf, this_tg, this_mode,output_file)
 
+        
+        
+fo.close()        
 
-  
+############################################
+
+
+fi=open(OUTPUT_TMP+'.summary.txt')
+fo=open(OUTPUT,'w')
+
+
+TFTG={}
+for line in fi:
+    input_file=line.rstrip()
+    tag='TF_'+input_file.split('TF_')[1].split('.txt')[0]
+
+    tf_mode=input_file.split('mode.')[1].split('.txt')[0]
+    #print input_file 
+    tag=tag.replace('_','.')
+    #print tag
+    ftmp=open(input_file)
+    ftmp.readline()
+    out=[tag+'.TG.HI']
+    out_lw=[tag+'.TG.LW']
+    header=[]
+    for l in ftmp:
+        sss=l.rstrip().split('\t') 
+        header.append(sss[0])
+        if sss[-1]=='TG_HI;TF_POS;':
+            out.append('1')
+        else:
+            out.append('0') 
+
+        if sss[-1] == 'TG_LW;TF_POS;':
+            out_lw.append('1')
+        else:
+            out_lw.append('0')
+    #if tf_mode=='A':
+    TFTG[tag+'.TG.HI']='\t'.join(out)
+    #elif tf_mode=='R':
+    TFTG[tag+'.TG.LW']='\t'.join(out_lw)
+ 
+
+fo.write('\t'.join(header)+'\n')
+for tag in TFTG:
+    fo.write(TFTG[tag]+'\n')
+
+
+fo.close()
+
 
