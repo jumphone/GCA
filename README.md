@@ -16,7 +16,10 @@ Requirements:
     Python packages: scipy    
     R packages: stringr, pastecs, mixtools, igraph
 
-Get normalized expression matrix: step0_normData.R
+Tips:
+
+    Get normalized expression matrix: sup1_normData.R
+    Downstream analysis of regulatory feature binary matrix: sup2_Downstream.R
 
 Command options:
 
