@@ -24,7 +24,7 @@ Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/ind
 
 # Command options:
 
-i) Expression index building (Python script)
+i) Build expression index (Python script)
 
     python | step1_BuildIndex.py | NETWORK | EXP | OUTPUT_INDEX | RATE
     
@@ -33,7 +33,7 @@ i) Expression index building (Python script)
     OUTPUT_INDEX: the index file name, given by the user   
     RATE: the cutoff for the non-zero rate. For each gene pair, non-zero rate equals to the proportion of cells of which two genes both are detected. 
 
-ii) Cell-specific network building (Python script)
+ii) Generate Z-value matrix (Python script)
 
     python | step2_CalZmat.py | OUTPUT_INDEX | OUTPUT_ZMAT | CPU    
     
@@ -41,7 +41,7 @@ ii) Cell-specific network building (Python script)
     OUTPUT_ZMAT: the z-value matrix file name, given by the user   
     CPU: the number of threads to run GCA 
 
-iii) Mixture models analyzing and result generating (R script)
+iii) Mixture models analysis (R script)
 
     Rscript | step3_deMix.R | EXP | OUTPUT_ZMAT | OUTPUT | CPU | SEED | CUTOFF
     
