@@ -8,21 +8,18 @@ Email: 15110700005@fudan.edu.cn
 
 Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/index.html
 
-# User Guide:
-
-Requirements:
+# Requirements:
 
     Operation system: Mac or Linux, python=2.7, R=3.5    
     Python packages: scipy    
     R packages: stringr, pastecs, mixtools, igraph
 
-Tips:
+# Tips:
 
-Get normalized expression matrix:  [sup1_normData.R](/GCA/sup1_normData.R) 
+  1.Get normalized expression matrix:  [sup1_normData.R](/GCA/sup1_normData.R) 
+  2.Downstream analysis of regulatory feature binary matrix: [sup2_Downstream.R](/GCA/sup2_Downstream.R)
 
-Downstream analysis of regulatory feature binary matrix: [sup2_Downstream.R](/GCA/sup2_Downstream.R)
-
-Command options:
+# Command options:
 
 i) Expression index building (Python script)
 
