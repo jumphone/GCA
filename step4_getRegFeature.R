@@ -3,12 +3,23 @@ import subprocess
 
 ACT_FLAG='Activation'
 REP_FLAG='Repression'
-
-
-TF_TG_FILE='trrust_rawdata.human.tsv'
-GCA_OUTPUT='GSE70630'
 EDGE_SCORE_CUTOFF=0.01
-OUTPUT='MODE'
+
+
+
+############################################
+
+print('$1 MODE, $2 GCA_OUTPUT, $3 OUTPUT')
+args = commandArgs(trailingOnly=TRUE)
+TF_TG_FILE = args[1]
+GCA_OUTPUT = args[2]
+OUTPUT=args[3]
+
+###############################
+
+#TF_TG_FILE='trrust_rawdata.human.tsv'
+#GCA_OUTPUT='GSE70630'
+#OUTPUT='MODE'
 
 subprocess.Popen('mkdir '+OUTPUT,shell=True).wait()
 
