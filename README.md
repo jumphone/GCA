@@ -1,5 +1,7 @@
 # GCA: Gene Correlation Analysis in Single-cell RNA-seq data
 
+![image](/image.png "image")
+
 Author: Feng Zhang
 
 Email: 15110700005@fudan.edu.cn
