@@ -1,4 +1,10 @@
-library(gplots)
+
+################################################################
+# Cluster
+################################################################
+
+
+library(Seurat)
 
 a = as.matrix(read.table('MODE_MAT.txt',header=T,row.names=1))
 SUM = apply(a,2,sum)
@@ -8,8 +14,6 @@ RSUM=apply(b,1,sum)
 b=b[which(RSUM>0),]
 
 all_gene=rownames(b)
-
-library(Seurat)
 
 EXP = CreateSeuratObject(raw.data = b, min.cells = 0, min.genes=0)
 EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
@@ -44,8 +48,8 @@ dev.off()
 write.table(top10,file='top10.txt',row.names=T,col.names=T,quote=F,sep='\t')
 
 ################################################################
-
-
+# Draw Graph
+################################################################
 
 library(stringr)
 library(igraph)
