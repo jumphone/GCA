@@ -24,7 +24,7 @@ Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/ind
 
 # How to run GCA
 
-i) Build expression index (Python)
+i) Build expression index ( Python )
 
     python | step1_BuildIndex.py | NETWORK | EXP | OUTPUT_INDEX | RATE
     
@@ -33,7 +33,7 @@ i) Build expression index (Python)
     OUTPUT_INDEX: the index file name, given by the user   
     RATE: the cutoff for the non-zero rate. For each gene pair, non-zero rate equals to the proportion of cells of which two genes both are detected. 
 
-ii) Generate Z-value matrix (Python)
+ii) Generate Z-value matrix ( Python )
 
     python | step2_CalZmat.py | OUTPUT_INDEX | OUTPUT_ZMAT | CPU    
     
@@ -41,7 +41,7 @@ ii) Generate Z-value matrix (Python)
     OUTPUT_ZMAT: the z-value matrix file name, given by the user   
     CPU: the number of threads to run GCA 
 
-iii) Mixture models analysis (R)
+iii) Mixture models analysis ( R )
 
     Rscript | step3_deMix.R | EXP | OUTPUT_ZMAT | OUTPUT | CPU | SEED | CUTOFF
     
@@ -52,7 +52,7 @@ iii) Mixture models analysis (R)
     SEED: seed for random function in R
     CUTOFF: the cutoff of edge score to draw the gene graph
     
-iv) Get regulatory feature binary matrix (Python)
+iv) Get regulatory feature binary matrix ( Python )
 
     python | step4_getRegFeature.py | MODE | GCA_OUTPUT | OUTPUT
     
