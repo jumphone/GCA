@@ -408,45 +408,6 @@ write.table(RANK_GENE_KSP_OUT, file=paste0(TMP_DIR,'/Pvalue_summary.txt'),sep='\
 
 #######################
 
-##########Draw graph#####################
-set.seed(RANDOM_SEED)
-OVER_OUT_SECOND_LAMBDA=OUT_SECOND_LAMBDA[which(OUT_SECOND_LAMBDA>=GRAPH_SCORE_CUTOFF),1 ]
-OVER_OUT_SECOND_LAMBDA=as.matrix(OVER_OUT_SECOND_LAMBDA)
-NET = cbind(rep('tag',length(OVER_OUT_SECOND_LAMBDA[,1])),rep('tag',length(OVER_OUT_SECOND_LAMBDA[,1])))   
-i=1
-while(i<=length(OVER_OUT_SECOND_LAMBDA[,1])){
-    p1p2 = unlist(strsplit(rownames(OVER_OUT_SECOND_LAMBDA)[i], ".And."))   
-    p1 = p1p2[1]
-    p2 = p1p2[2]
-    NET[i,1]=p1
-    NET[i,2]=p2
-    i=i+1}
-g <- make_graph(t(NET),directed = FALSE)
-#########################
-colors <- colorRampPalette(c('white','grey95','grey90','lightpink','indianred1',"red1", "red3", "red4",'darkred','darkred','darkred'))(51)
-E(g)$color = colors[as.integer(OVER_OUT_SECOND_LAMBDA[,1] * 100)+1]
-node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
-pdf(paste0(TMP_DIR,'/G.pdf'),width=20,height=20)
-plot( c(1:51)/100,c(1:51)/100, col=colors, ylab='Score', xlab='Score', pch=16,cex=5,lwd=5,type='p',main='Edge Color Key')
-#l <- layout_with_fr(g)
-#plot(main='All', g, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
-plot(main=paste0('All, Score Cutoff=',as.character(GRAPH_SCORE_CUTOFF)), g, vertex.label.cex=1,edge.width=3, vertex.size=1, vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
-
-V(g)$comp <- components(g)$membership
-i=1
-while(i<=max(V(g)$comp)){
-    this_subg = induced_subgraph(g,V(g)$comp==i)
-    #l <- layout_with_fr(this_subg)
-    #plot(main=paste0('SubGraph',as.character(i)),this_subg, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
-    if(length(E(this_subg))>=2){
-        #plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
-        plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=1,edge.width=3, vertex.size=1, vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
-        }
-    i=i+1}
-dev.off()
-#######################
-
-WARNINGS=warnings();
 
 #########Output HTML#############
 OUT_HTML=c('<center><header><h1>Result</h1></header>')
@@ -489,6 +450,51 @@ write.table(OUT_HTML,file=paste0(TMP_DIR,'/index.html'),sep='\t',quote=F,row.nam
 ################
 save.image(file=paste0(TMP_DIR,'.saved_RData'))
 ################
+
+
+##########Draw graph#####################
+set.seed(RANDOM_SEED)
+
+
+OVER_OUT_SECOND_LAMBDA=OUT_SECOND_LAMBDA[which(OUT_SECOND_LAMBDA>=GRAPH_SCORE_CUTOFF),1 ]
+OVER_OUT_SECOND_LAMBDA=as.matrix(OVER_OUT_SECOND_LAMBDA)
+NET = cbind(rep('tag',length(OVER_OUT_SECOND_LAMBDA[,1])),rep('tag',length(OVER_OUT_SECOND_LAMBDA[,1])))   
+i=1
+while(i<=length(OVER_OUT_SECOND_LAMBDA[,1])){
+    p1p2 = unlist(strsplit(rownames(OVER_OUT_SECOND_LAMBDA)[i], ".And."))   
+    p1 = p1p2[1]
+    p2 = p1p2[2]
+    NET[i,1]=p1
+    NET[i,2]=p2
+    i=i+1}
+g <- make_graph(t(NET),directed = FALSE)
+#########################
+colors <- colorRampPalette(c('white','grey95','grey90','lightpink','indianred1',"red1", "red3", "red4",'darkred','darkred','darkred'))(51)
+E(g)$color = colors[as.integer(OVER_OUT_SECOND_LAMBDA[,1] * 100)+1]
+node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
+pdf(paste0(TMP_DIR,'/G.pdf'),width=20,height=20)
+plot( c(1:51)/100,c(1:51)/100, col=colors, ylab='Score', xlab='Score', pch=16,cex=5,lwd=5,type='p',main='Edge Color Key')
+#l <- layout_with_fr(g)
+#plot(main='All', g, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+plot(main=paste0('All, Score Cutoff=',as.character(GRAPH_SCORE_CUTOFF)), g, vertex.label.cex=1,edge.width=3, vertex.size=1, vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+
+V(g)$comp <- components(g)$membership
+i=1
+while(i<=max(V(g)$comp)){
+    this_subg = induced_subgraph(g,V(g)$comp==i)
+    #l <- layout_with_fr(this_subg)
+    #plot(main=paste0('SubGraph',as.character(i)),this_subg, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+    if(length(E(this_subg))>=2){
+        #plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+        plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=1,edge.width=3, vertex.size=1, vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+        }
+    i=i+1}
+dev.off()
+#######################
+
+WARNINGS=warnings();
+
+
 
 
 
