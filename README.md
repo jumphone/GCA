@@ -63,7 +63,7 @@ iv) Get regulatory feature binary matrix ( Python )
     
 # Result introduction
 
-The result summary HTML file named “index.html” locates in the output directory. A result demo is available at: http://omics.fudan.edu.cn/static/demo/GCA/GSE70630/index.html
+The result summary HTML file named “index.html” locates in the output directory. 
 
 The left side of this page records the contribution score of each gene, and the right side presents the edge score of each gene pair.
 
