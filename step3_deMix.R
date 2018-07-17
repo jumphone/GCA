@@ -15,7 +15,7 @@ library(igraph)
 ########Pre-setting##############
 MAX_CLUST_NUM=3
 MIN_BW=0.01
-MAX_BW=0.3
+MAX_BW=0.2
 BW_STEP=0.01
 ##########################
 
