@@ -123,10 +123,10 @@ SINGLE = function(i){
             j=1
             while(j<=length(this_zvalue_all)){
                 this_z = this_zvalue_all[j]
-                if(!is.na(this_z)){
-                    if(this_z < DW){this_z=DW}
-                    if(this_z > UP){this_z=UP}
-                    }
+                #if(!is.na(this_z)){
+                #    if(this_z < DW){this_z=DW}
+                #    if(this_z > UP){this_z=UP}
+                #    }
                 if(!is.na(this_z) & this_z <= UP & this_z >= DW){
                     this_d = dnorm(this_z, mean=mix1$mu, sd=mix1$sigma )*mix1$lambda
                     this_c=1
