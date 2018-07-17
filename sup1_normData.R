@@ -1,8 +1,6 @@
 library(Seurat)
 library(dplyr)
 library(Matrix)
-suppressPackageStartupMessages(library(edgeR))
-
 
 exp_data=Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")
 EXP = CreateSeuratObject(raw.data = exp_data, min.cells = 3, min.genes=100)
@@ -31,6 +29,7 @@ while(i <= length(all_gene)){
     OUT[i,]=as.matrix(EXP@scale.data)[i,]-MIN[i]
     i=i+1
 }
+OUT[which(EXP@data==0)]=0
 #############
 summary(OUT[,1])
 write.table(file='normalized_exp.txt',OUT,row.names=T,col.names=T,quote=F,sep='\t')
