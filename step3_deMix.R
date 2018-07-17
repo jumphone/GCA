@@ -44,6 +44,8 @@ ROW_NUM=length(input_data[,1])
 COL_NUM=length(input_data[1,])
 ROW_LABEL=rownames(input_data)
 COL_LABEL=colnames(input_data)
+
+save.image(file=paste0(TMP_DIR,'.readData_RData'))
 ########################
 
 
