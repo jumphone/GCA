@@ -50,7 +50,6 @@ COL_LABEL=colnames(input_data)
 #########################################################
 
 
-
 ######Single Thread Funtion##################
 SINGLE = function(i){
     print(i)
@@ -64,7 +63,7 @@ SINGLE = function(i){
     IQR=quantile(tmp,0.75)-quantile(tmp,0.25)
     UP=quantile(tmp,0.75)+1.5*IQR
     DW=quantile(tmp,0.25)-1.5*IQR
-    tmp=tmp[which(tmp<UP & tmp >DW)]
+    tmp=tmp[which(tmp <= UP & tmp >= DW)]
     ############################################
     tmp_out_path=paste0(TMP_DIR,'/',this_row_label)
     ori_data = t(input_data[i,])
@@ -96,8 +95,7 @@ SINGLE = function(i){
                     peak_num_list=c(peak_num_list,PEAK_NUM)
                     second_lambda_list=c(second_lambda_list,second_lambda)
                     #############################
-                    sl_score_list=c(sl_score_list, second_lambda)
-                    #sl_score_list=c(sl_score_list, second_lambda - (1-first_lambda-second_lambda))
+                    sl_score_list=c(sl_score_list, second_lambda)              
                     #############################
                     },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
                 }
@@ -105,25 +103,33 @@ SINGLE = function(i){
 
         if(length(second_lambda_list)>0){
             run_flag=0
-            #best_index=which(second_lambda_list==max(second_lambda_list))
             best_index=which(sl_score_list==max(sl_score_list))[1]
+            ##############
             bw=bw_list[best_index]
+            ###############
             D=density(tmp,bw)
             PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
             MEAN=D$x[which(PEAK_PIT==1)]
             PEAK_NUM=length(which(PEAK_PIT==1))
             set.seed(RANDOM_SEED)
-            mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000) 
-            #plot.mixEM(mix1,whichplots=2,breaks=50)       
+            mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)       
             clust_out = rep(0,length(ori_data))
             j=1
             while(j<=length(ori_data)){
                 this_z = ori_data[j]
-                if(!is.na(this_z) & this_z < UP & this_z > DW){
+                #######################################
+                if(this_z > UP){this_z = UP}
+                if(this_z < DW){this_z = DW}
+                #######################################               
+                if(!is.na(this_z) & this_z <= UP & this_z >= DW){
                     this_d = dnorm(this_z, mean=mix1$mu, sd=mix1$sigma )*mix1$lambda
                     this_c=1
                     while(this_c <=length(this_d)){
-                        if(this_d[this_c] >=max(this_d)){clust_out[j]=this_c}
+                        if(this_d[this_c] >=max(this_d)){
+                            #################
+                            clust_out[j]=this_c
+                            #################
+                            }
                         this_c=this_c+1
                         }                
                     }
@@ -140,7 +146,7 @@ SINGLE = function(i){
             plot.mixEM(mix1,whichplots=2,breaks=50)
             COL=clust_out+1
 
-            ############################  
+            ###########Pie#################  
             all_cell_num = length(COL_LABEL)
             this_tag_cell_num = length(tmp)
             this_pie_data=c(1-this_tag_cell_num/all_cell_num)
@@ -192,7 +198,7 @@ SINGLE = function(i){
             plot(main='Z and EXP (Z color key, purple: -2; gold: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
             ####################################
             
-            this_v_out = which( !(ori_data < UP & ori_data > DW ) )
+            this_v_out = which( !(ori_data <= UP & ori_data >= DW ) )
             this_col=rep('black',length(p1_exp))
             this_col[this_v_out]='grey'
             this_pch=rep(16,length(p1_exp))
@@ -214,7 +220,7 @@ SINGLE = function(i){
                     }
                 }
             ############################
-            this_v_nout = which( (ori_data < UP & ori_data > DW ) )
+            this_v_nout = ori_data #which( (ori_data <= UP & ori_data >= DW ) )
             this_nout_xlim = c(min(p1_exp[this_v_nout ]),max(p1_exp[this_v_nout ]))
             this_nout_ylim = c(min(p2_exp[this_v_nout ]),max(p2_exp[this_v_nout ]))
 
