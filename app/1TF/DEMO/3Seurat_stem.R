@@ -39,7 +39,7 @@ PCAPlot(object = EXP, dim.1 = 1, dim.2 = 2)
 PCUSE=1:10
 EXP = RunTSNE(object = EXP, dims.use = PCUSE, do.fast = TRUE,check_duplicates = FALSE )
 
-RES=0.5
+RES=0.6
 EXP <- FindClusters(object = EXP, reduction.type = "pca", dims.use = PCUSE,  resolution = RES, print.output = 0, save.SNN = TRUE,force.recalc =T)
 
 ########################################
