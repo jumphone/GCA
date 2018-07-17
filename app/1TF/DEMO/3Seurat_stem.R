@@ -80,8 +80,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
-#plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,main='STEM')
-plot(x=c(0:(length(unique(EXP@ident))-1)),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,main='STEM')
+plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,main='STEM')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
@@ -108,7 +107,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
-plot(x=c(0:(length(unique(EXP@ident))-1)),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='AC')
+plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='AC')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
@@ -134,7 +133,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
-plot(x=c(0:(length(unique(EXP@ident))-1)),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='OC')
+plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='OC')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
@@ -148,7 +147,7 @@ NEW_COMBINE[which(COMBINE< log(0.05,2))]= 0
 #heatmap.2(NEW_COMBINE,scale='none')
 
 
-rownames(NEW_COMBINE)=as.character(c(0:(length(unique(EXP@ident))-1) ))
+rownames(NEW_COMBINE)=as.character(c(0:12))
 colnames(NEW_COMBINE)=c('STEM','AC','OC')
 library('gplots')
 #heatmap.2(NEW_COMBINE,scale='none',trace='none',col=colorRampPalette(c('blue','grey80','red')),cexCol=1)
