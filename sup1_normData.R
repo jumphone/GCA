@@ -21,9 +21,9 @@ EXP=FilterCells(object = EXP, subset.names = c("nGene", "percent.mito"), low.thr
 #EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
 
 raw_exp_data= as.matrix(EXP@data)
-tmm=edgeR::calcNormFactors(raw_exp_data)
-exptmm=edgeR::cpm(raw_exp_data, lib.size = tmm * colSums(raw_exp_data))
-#exptmm=edgeR::cpm(raw_exp_data, lib.size = colSums(raw_exp_data),normalized.lib.sizes=T)
+#tmm=edgeR::calcNormFactors(raw_exp_data)
+#exptmm=edgeR::cpm(raw_exp_data, lib.size = tmm * colSums(raw_exp_data))
+exptmm=edgeR::cpm(raw_exp_data, lib.size = colSums(raw_exp_data),normalized.lib.sizes=T)
 logexp <- log2(exptmm + 1)
 #OUT=as.matrix(EXP@data)#logexp 
 OUT=logexp
