@@ -140,7 +140,7 @@ SINGLE = function(i){
             plot.mixEM(mix1,whichplots=2,breaks=50)
             COL=clust_out+1
 
-            ############################  
+            #######Pie#####################  
             all_cell_num = length(COL_LABEL)
             this_tag_cell_num = length(tmp)
             this_pie_data=c(1-this_tag_cell_num/all_cell_num)
@@ -156,7 +156,7 @@ SINGLE = function(i){
             pie(this_pie_data, labels=as.character(round(this_pie_data,2)),col=this_pie_col, radius = 0.9, main='Proportion Estimation (All)')
             ##############################        
             pie(mix1$lambda, labels=as.character(round(mix1$lambda,2)),col=(c(1:length(mix1$lambda))+1), radius = 0.9, main='Proportion Estimation (nonNA)')
-            ################################
+            ########Plot########################
             
             cell_index=c(1:length(ori_data))
             this_pch=rep(16,length(ori_data)) 
@@ -181,7 +181,7 @@ SINGLE = function(i){
             this_xlim = c(min(p1_exp),max(p1_exp))
             this_ylim = c(min(p2_exp),max(p2_exp))
             this_v = which(p1_exp!=0 & p2_exp!=0)  
-            ###################################
+            ###########Z-value########################
             col_data=ori_data[this_v]
             col_data[which(col_data< -2)]=-2
             col_data[which(col_data > 2)]=2
@@ -190,7 +190,7 @@ SINGLE = function(i){
             col_key=colorRampPalette(c("purple","grey80", "gold2"))(41)
             col_data_key=col_key[col_data]
             plot(main='Z and EXP (Z color key, purple: -2; gold: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
-            ####################################
+            ############All########################
             
             this_v_out = which( !(ori_data < UP & ori_data > DW ) )
             this_col=rep('black',length(p1_exp))
@@ -201,7 +201,7 @@ SINGLE = function(i){
             plot(p1_exp[this_v], p2_exp[this_v], xlab=p1, ylab=p2, xlim=this_xlim, ylim=this_ylim,main=paste0('All, N=',as.character(length(this_v)),', PCC=',as.character(this_pcc)),pch = this_pch[this_v] , col=this_col[this_v])
             
 
-            ############################
+            ###########sub-groups#################
             plot(p1_exp[this_v], p2_exp[this_v], xlab=p1, ylab=p2, xlim=this_xlim, ylim=this_ylim, main='With cluster color', pch = this_pch[this_v] , col=this_col[this_v])
             for(this_cluster_index in unique(clust_out[which(clust_out!=0)])){
                 tmp_cell_index = which(clust_out == this_cluster_index)
