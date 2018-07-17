@@ -15,8 +15,9 @@ library(igraph)
 ########Pre-setting##############
 MAX_CLUST_NUM=3
 MIN_BW=0.01
-MAX_BW=0.3
+MAX_BW=0.5
 BW_STEP=0.01
+BREAKS=50
 ##########################
 
 
@@ -58,93 +59,100 @@ SINGLE = function(i){
     print(i)
     set.seed(RANDOM_SEED)
     this_row_label=ROW_LABEL[i]
-    tmp=t(input_data[i,])
+    this_zvalue_all=t(input_data[i,])
     
     ###########Remove NA and Outliers#############
-    tmp=tmp[which(!is.na(tmp))]
-    tmp_med=median(tmp)
-    IQR=quantile(tmp,0.75)-quantile(tmp,0.25)
-    UP=quantile(tmp,0.75)+1.5*IQR
-    DW=quantile(tmp,0.25)-1.5*IQR
-    tmp=tmp[which(tmp<UP & tmp >DW)]
+    this_zvalue_without_Na=this_zvalue_all[which(!is.na(this_zvalue_all))]
+    IQR=quantile(this_zvalue_without_Na,0.75)-quantile(this_zvalue_without_Na,0.25)
+    UP=quantile(this_zvalue_without_Na,0.75)+1.5*IQR
+    DW=quantile(this_zvalue_without_Na,0.25)-1.5*IQR
+    this_zvalue_without_NaOut=this_zvalue_without_Na[which(this_zvalue_without_Na<=UP & this_zvalue_without_Na >=DW)]
     ############################################
-    tmp_out_path=paste0(TMP_DIR,'/',this_row_label)
-    ori_data = t(input_data[i,])
+    this_out_path=paste0(TMP_DIR,'/',this_row_label)
     ##########################
     run_flag=1
     ############################################
 
-    if(1==1){ 
+    if(run_flag==1){ 
         ###########Find peak#############  
-        bw_list=c()
+        bw_list=c() #bandwidth
         second_lambda_list=c()
         peak_num_list=c()
-        sl_score_list=c()
+        edge_score_list=c()
         
         bw=MIN_BW
         while(bw < MAX_BW+BW_STEP){       
-            D=density(tmp,bw)
+            D=density(this_zvalue_without_NaOut,bw)
             PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
             MEAN=D$x[which(PEAK_PIT==1)]
             PEAK_NUM=length(which(PEAK_PIT==1))
         
-            if(PEAK_NUM>1 & PEAK_NUM < MAX_CLUST_NUM+1){
+            if(PEAK_NUM>1 & PEAK_NUM <= MAX_CLUST_NUM){
                 set.seed(RANDOM_SEED)
                 tryCatch({
-                    mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000)  
+                    mix1=normalmixEM(this_zvalue_without_NaOut,mu=MEAN,mean.constr=MEAN,maxit=10000)  
                     second_lambda=sort(mix1$lambda,decreasing=T)[2]
                     first_lambda=sort(mix1$lambda,decreasing=T)[1]
                     bw_list=c(bw_list,bw)
                     peak_num_list=c(peak_num_list,PEAK_NUM)
-                    second_lambda_list=c(second_lambda_list,second_lambda)
+                    second_lambda_list=c(second_lambda_list, second_lambda  )
                     #############################
-                    sl_score_list=c(sl_score_list, second_lambda)
-                    #sl_score_list=c(sl_score_list, second_lambda - (1-first_lambda-second_lambda))
+                    edge_score_list=c(edge_score_list, second_lambda * PEAK_NUM**10)
                     #############################
                     },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
                 }
         bw=bw+BW_STEP}
 
-        if(length(second_lambda_list)>0){
+        if(length(edge_score_list)>0){
+            ######
             run_flag=0
-            #best_index=which(second_lambda_list==max(second_lambda_list))
-            best_index=which(sl_score_list==max(sl_score_list))[1]
+            ######
+            best_index=which(edge_score_list==max(edge_score_list))[1]
             bw=bw_list[best_index]
-            D=density(tmp,bw)
+            D=density(this_zvalue_without_NaOut,bw)
             PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
             MEAN=D$x[which(PEAK_PIT==1)]
             PEAK_NUM=length(which(PEAK_PIT==1))
             set.seed(RANDOM_SEED)
-            mix1=normalmixEM(tmp,mu=MEAN,mean.constr=MEAN,maxit=10000) 
-            #plot.mixEM(mix1,whichplots=2,breaks=50)       
-            clust_out = rep(0,length(ori_data))
+            mix1=normalmixEM(this_zvalue_without_NaOut,mu=MEAN,mean.constr=MEAN,maxit=10000) 
+            #plot.mixEM(mix1,whichplots=2,breaks=50) 
+
+            ###########################################
+            ###########define cluster tag###############
+            clust_tag_list = rep(0,length(this_zvalue_all))           
             j=1
-            while(j<=length(ori_data)){
-                this_z = ori_data[j]
-                if(!is.na(this_z) & this_z < UP & this_z > DW){
+            while(j<=length(this_zvalue_all)){
+                this_z = this_zvalue_all[j]
+                if(!is.na(this_z)){
+                    if(this_z < DW){this_z=DW}
+                    if(this_z > UP){this_z=UP}
+                    }
+                if(!is.na(this_z) & this_z <= UP & this_z >= DW){
                     this_d = dnorm(this_z, mean=mix1$mu, sd=mix1$sigma )*mix1$lambda
                     this_c=1
                     while(this_c <=length(this_d)){
-                        if(this_d[this_c] >=max(this_d)){clust_out[j]=this_c}
+                        if(this_d[this_c] >=max(this_d)){
+                            clust_tag_list[j]=this_c}
                         this_c=this_c+1
                         }                
                     }
                 j=j+1
-                }     
-        ############################################
-        #if(length(unique(clust_out[which(clust_out!=0)]))>1  ) { 
+                }  
+            COL=clust_tag_list+1   
+            ############################################
+        
         
             ###########Draw figures#############
-            pdf(paste0(tmp_out_path,'.pdf'),width=10,height=10)
+            pdf(paste0(this_out_path,'.pdf'),width=10,height=10)
             par(mfrow=c(2,2))
             plot(D,main=this_row_label)
             abline(v=MEAN,col='red',lty=3)
-            plot.mixEM(mix1,whichplots=2,breaks=50)
-            COL=clust_out+1
-
+            plot.mixEM(mix1,whichplots=2,breaks=BREAKS)
+            
+  
             #######Pie#####################  
             all_cell_num = length(COL_LABEL)
-            this_tag_cell_num = length(tmp)
+            this_tag_cell_num = length(this_zvalue_without_NaOut)
             this_pie_data=c(1-this_tag_cell_num/all_cell_num)
             this_pie_col=c(0)
             mix_index=1
@@ -160,16 +168,16 @@ SINGLE = function(i){
             pie(mix1$lambda, labels=as.character(round(mix1$lambda,2)),col=(c(1:length(mix1$lambda))+1), radius = 0.9, main='Proportion Estimation (nonNA)')
             ########Plot########################
             
-            cell_index=c(1:length(ori_data))
-            this_pch=rep(16,length(ori_data)) 
+            cell_index=c(1:length(this_zvalue_all))
+            this_pch=rep(16,length(this_zvalue_all)) 
  
-            this_pch[which(COL==1)]=3
+            this_pch[which(is.na(this_zvalue_all) | this_zvalue_all <DW | this_zvalue_all > UP )]=3
           
-            plot(ori_data, cell_index, col=COL, pch=this_pch, xlab='z_value', main='All')  #,xlim=c(DW,UP))
+            plot(this_zvalue_all, cell_index, col=COL, pch=this_pch, xlab='z_value', main='All')  #,xlim=c(DW,UP))
             abline(v=UP,col='black',lty=3)
             abline(v=DW,col='black',lty=3)
 
-            plot(ori_data, cell_index, col=COL, pch=this_pch  ,xlim=c(DW,UP),xlab='z_value', main='No outlier')
+            plot(this_zvalue_all, cell_index, col=COL, pch=this_pch  ,xlim=c(DW,UP),xlab='z_value', main='No outlier')
             abline(v=UP,col='black',lty=3)
             abline(v=DW,col='black',lty=3)
             
@@ -184,17 +192,17 @@ SINGLE = function(i){
             this_ylim = c(min(p2_exp),max(p2_exp))
             this_v = which(p1_exp!=0 & p2_exp!=0)  
             ###########Z-value########################
-            col_data=ori_data[this_v]
+            col_data=this_zvalue_all[this_v]
             col_data[which(col_data< -2)]=-2
             col_data[which(col_data > 2)]=2
             col_data=(col_data+2)*10+1
             col_data=as.integer(col_data)
             col_key=colorRampPalette(c("purple","grey80", "gold2"))(41)
             col_data_key=col_key[col_data]
-            plot(main='Z and EXP (Z color key, purple: -2; gold: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
+            plot(main='Z and EXP (Z: purple -2; gold 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
             ############All########################
             
-            this_v_out = which( !(ori_data < UP & ori_data > DW ) )
+            this_v_out = which( !(this_zvalue_all <= UP & this_zvalue_all >= DW ) )
             this_col=rep('black',length(p1_exp))
             this_col[this_v_out]='grey'
             this_pch=rep(16,length(p1_exp))
@@ -205,9 +213,8 @@ SINGLE = function(i){
 
             ###########sub-groups#################
             plot(p1_exp[this_v], p2_exp[this_v], xlab=p1, ylab=p2, xlim=this_xlim, ylim=this_ylim, main='With cluster color', pch = this_pch[this_v] , col=this_col[this_v])
-            for(this_cluster_index in unique(clust_out[which(clust_out!=0)])){
-                tmp_cell_index = which(clust_out == this_cluster_index)
-                
+            for(this_cluster_index in unique(clust_tag_list[which(clust_tag_list!=0)])){
+                tmp_cell_index = which(clust_tag_list == this_cluster_index) 
                 if(length(tmp_cell_index) >= 1 ){
                     tmp_p1_exp=p1_exp[tmp_cell_index]
                     tmp_p2_exp=p2_exp[tmp_cell_index]
@@ -216,12 +223,13 @@ SINGLE = function(i){
                     }
                 }
             ############################
-            this_v_nout = which( (ori_data < UP & ori_data > DW ) )
+            #this_v_nout = which( (this_zvalue_all <= UP & this_zvalue_all >= DW ) )
+            this_v_nout = which( !is.na(this_zvalue_all) )
             this_nout_xlim = c(min(p1_exp[this_v_nout ]),max(p1_exp[this_v_nout ]))
             this_nout_ylim = c(min(p2_exp[this_v_nout ]),max(p2_exp[this_v_nout ]))
 
-            for(this_cluster_index in unique(clust_out[which(clust_out!=0)])){
-                tmp_cell_index = which(clust_out == this_cluster_index)
+            for(this_cluster_index in unique(clust_tag_list[which(clust_tag_list!=0)])){
+                tmp_cell_index = which(clust_tag_list == this_cluster_index)
                 
                 if(length(tmp_cell_index) >= 1 ){
                     tmp_p1_exp=p1_exp[tmp_cell_index]
@@ -239,16 +247,16 @@ SINGLE = function(i){
             mix1.color=palette()[c(1:length(mix1$lambda))+1]
             tmp_out=cbind(mix1$lambda,mix1$mu,mix1$sigma,mix1.color,mix1.cluster)
             colnames(tmp_out)=c('lambda','mu','sigma','color','cluster')         
-            write.table(as.matrix(tmp_out),file=paste0(tmp_out_path,'.summary.txt'),sep='\t',quote=F,row.names=F,col.names=T)
+            write.table(as.matrix(tmp_out),file=paste0(this_out_path,'.summary.txt'),sep='\t',quote=F,row.names=F,col.names=T)
             
-            clust_out=cbind(COL_LABEL, ori_data, palette()[clust_out+1], clust_out, p1_exp, p2_exp)
+            clust_out=cbind(COL_LABEL, this_zvalue_all, palette()[clust_tag_list+1], clust_tag_list, p1_exp, p2_exp)
             colnames(clust_out)=c('Cell_name','Zvalue','Color','Cluster',p1,p2) 
-            write.table(as.matrix(clust_out),file=paste0(tmp_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
+            write.table(as.matrix(clust_out),file=paste0(this_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
             ############################
             if(length(mix1$lambda)>=2){
             
                 this_second_lambda=sort(mix1$lambda,decreasing=T)[2]
-                OUT=c(this_row_label,length(tmp) / length(COL_LABEL) *this_second_lambda )
+                OUT=c(this_row_label, length(this_zvalue_without_NaOut) / length(COL_LABEL) *this_second_lambda )
                 
                 }
             else{OUT=c(this_row_label,0)}
@@ -256,26 +264,26 @@ SINGLE = function(i){
             }
         }
     if(run_flag==1){
-        if(1==1){
+        
             #######draw#############
-            D=density(tmp,MAX_BW)
+            D=density(this_zvalue_without_NaOut, MAX_BW)
             PEAK_PIT=extract(turnpoints(D$y),length(D$y),peak=1,pit=-1)
             MEAN=D$x[which(PEAK_PIT==1)]
             PEAK_NUM=length(which(PEAK_PIT==1))
-            pdf(paste0(tmp_out_path,'.pdf'),width=10,height=10)
+            pdf(paste0(this_out_path,'.pdf'),width=10,height=10)
             par(mfrow=c(2,2))
             plot(D,main=this_row_label)
             abline(v=MEAN,col='red',lty=3)
-            hist(tmp,breaks=50)
+            hist(this_zvalue_without_NaOut,breaks=BREAKS)
             ############################
-            cell_index=c(1:length(ori_data))
-            this_pch=rep(16,length(ori_data)) 
-            this_v_out = which( !(ori_data < UP & ori_data > DW ) )
+            cell_index=c(1:length(this_zvalue_all))
+            this_pch=rep(16,length(this_zvalue_all)) 
+            this_v_out = which( !(this_zvalue_all <= UP & this_zvalue_all >= DW ) )
             this_pch[this_v_out]=3  
-            plot(ori_data, cell_index,  pch=this_pch, xlab='z_value', main='All')  #,xlim=c(DW,UP))
+            plot(this_zvalue_all, cell_index,  pch=this_pch, xlab='z_value', main='All')  #,xlim=c(DW,UP))
             abline(v=UP,col='black',lty=3)
             abline(v=DW,col='black',lty=3)
-            plot(ori_data, cell_index, pch=this_pch  ,xlim=c(DW,UP),xlab='z_value', main='No outlier')
+            plot(this_zvalue_all, cell_index, pch=this_pch  ,xlim=c(DW,UP),xlab='z_value', main='No outlier')
             abline(v=UP,col='black',lty=3)
             abline(v=DW,col='black',lty=3)
             ############################
@@ -291,7 +299,7 @@ SINGLE = function(i){
             this_v = which(p1_exp!=0 & p2_exp!=0)  
 
             ###################################
-            col_data=ori_data[this_v]
+            col_data=this_zvalue_all[this_v]
             col_data[which(col_data< -2)]=-2
             col_data[which(col_data > 2)]=2
             col_data=(col_data+2)*10+1
@@ -301,7 +309,7 @@ SINGLE = function(i){
             plot(main='Z and EXP (Z color key, purple: -2; gold: 2)',p1_exp[this_v],p2_exp[this_v],xlab=p1,ylab=p2,col=col_data_key,xlim=this_xlim,ylim=this_ylim,pch=16)
             ####################################
             
-            this_v_out = which( !(ori_data < UP & ori_data > DW ) )
+            this_v_out = which( !(this_zvalue_all <= UP & this_zvalue_all >= DW ) )
             this_col=rep('black',length(p1_exp))
             this_col[this_v_out]='grey'
             this_pch=rep(16,length(p1_exp))
@@ -313,16 +321,16 @@ SINGLE = function(i){
             ###########Write files#################
                
             tmp_out='None'     
-            write.table(as.matrix(tmp_out),file=paste0(tmp_out_path,'.summary.txt'),sep='\t',quote=F,row.names=F,col.names=T)
+            write.table(as.matrix(tmp_out),file=paste0(this_out_path,'.summary.txt'),sep='\t',quote=F,row.names=F,col.names=T)
             
-            clust_out=cbind(COL_LABEL, ori_data, p1_exp, p2_exp)
+            clust_out=cbind(COL_LABEL, this_zvalue_all, p1_exp, p2_exp)
             colnames(clust_out)=c('Cell_name','Zvalue',p1,p2) 
-            write.table(as.matrix(clust_out),file=paste0(tmp_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
+            write.table(as.matrix(clust_out),file=paste0(this_out_path,'.cluster.txt'),sep='\t',quote=F,row.names=F,col.names=T)          
             ############################
             #OUT=c(this_row_label, sort(mix1$lambda,decreasing=T)[2])
             OUT=c(this_row_label, 0)
             return(OUT)            
-            }
+            
         }  
     }
 #######################################
@@ -456,8 +464,6 @@ save.image(file=paste0(TMP_DIR,'.saved_RData'))
 
 ##########Draw graph#####################
 set.seed(RANDOM_SEED)
-
-
 OVER_OUT_SECOND_LAMBDA=OUT_SECOND_LAMBDA[which(OUT_SECOND_LAMBDA>=GRAPH_SCORE_CUTOFF),1 ]
 OVER_OUT_SECOND_LAMBDA=as.matrix(OVER_OUT_SECOND_LAMBDA)
 NET = cbind(rep('tag',length(OVER_OUT_SECOND_LAMBDA[,1])),rep('tag',length(OVER_OUT_SECOND_LAMBDA[,1])))   
@@ -476,18 +482,13 @@ E(g)$color = colors[as.integer(OVER_OUT_SECOND_LAMBDA[,1] * 100)+1]
 node.size=setNames( (1-RANK_GENE_KSP)*3,names(RANK_GENE_KSP))
 pdf(paste0(TMP_DIR,'/G.pdf'),width=20,height=20)
 plot( c(1:51)/100,c(1:51)/100, col=colors, ylab='Score', xlab='Score', pch=16,cex=5,lwd=5,type='p',main='Edge Color Key')
-#l <- layout_with_fr(g)
-#plot(main='All', g, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
 plot(main=paste0('All, Score Cutoff=',as.character(GRAPH_SCORE_CUTOFF)), g, vertex.label.cex=1,edge.width=3, vertex.size=1, vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
 
 V(g)$comp <- components(g)$membership
 i=1
 while(i<=max(V(g)$comp)){
     this_subg = induced_subgraph(g,V(g)$comp==i)
-    #l <- layout_with_fr(this_subg)
-    #plot(main=paste0('SubGraph',as.character(i)),this_subg, layout=layout_with_fr, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
-    if(length(E(this_subg))>=2){
-        #plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=0.5, vertex.size=as.matrix(node.size), vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
+     if(length(E(this_subg))>=2){
         plot(main=paste0('SubGraph',as.character(i)),this_subg, vertex.label.cex=1,edge.width=3, vertex.size=1, vertex.label.dist=0, vertex.label.color = "black",vertex.frame.color = "white",vertex.color = "gold2")
         }
     i=i+1}
