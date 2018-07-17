@@ -37,15 +37,15 @@ pbmc=EXP
 library(dplyr)
 pbmc.markers <- FindAllMarkers(object = pbmc, only.pos = TRUE, min.pct = 0.05, thresh.use = 0.1)
 pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
-top20 <- pbmc.markers %>% group_by(cluster) %>% top_n(20, avg_logFC)
-DoHeatmap(object = pbmc, genes.use = top20$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
+top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
+DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
 
 pdf('OUTPUT.pdf',width=7,height=7)
 TSNEPlot(object = EXP,do.label=T)
-DoHeatmap(object = pbmc, genes.use = top20$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey90", col.high = "red",cex.row=6 )
+DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey90", col.high = "red",cex.row=6 )
 dev.off()
 
-write.table(top20,file='top20.txt',row.names=T,col.names=T,quote=F,sep='\t')
+write.table(top10,file='top10.txt',row.names=T,col.names=T,quote=F,sep='\t')
 
 ################################################################
 # Draw Graph
@@ -54,14 +54,14 @@ write.table(top20,file='top20.txt',row.names=T,col.names=T,quote=F,sep='\t')
 library(stringr)
 library(igraph)
 
-top20=read.table('top20.txt',row.names=1,header=T)
+top10=read.table('top10.txt',row.names=1,header=T)
 
-cluster_list = unique(top20[,6])
+cluster_list = unique(top10[,6])
 
 pdf('GRAPH.pdf',width=10,height=10)
 
 for(this_cluster in cluster_list){   
-    this_cluster_info=top20[which(top20[,6]==this_cluster),]    
+    this_cluster_info=top10[which(top10[,6]==this_cluster),]    
     NET = cbind(rep('tag',length(this_cluster_info[,1])),rep('tag',length(this_cluster_info[,1])))  
     EDGE_COLOR = c()
     NODE_COLOR = c()
