@@ -79,7 +79,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=-log(0.05,2),lty=3)
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
-COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
+COL[which(neg_log_2_adjp*direction > -log(0.05,2))]='red'
 plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,main='STEM')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
@@ -106,7 +106,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=-log(0.05,2),lty=3)
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
-COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
+COL[which(neg_log_2_adjp*direction > -log(0.05,2))]='red'
 plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='AC')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
@@ -132,7 +132,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=-log(0.05,2),lty=3)
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
-COL[which(neg_log_2_adjp > -log(0.05,2))]='red'
+COL[which(neg_log_2_adjp*direction > -log(0.05,2))]='red'
 plot(x=c(0:12),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='OC')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
@@ -155,7 +155,7 @@ NEW_NEW_COMBINE=NEW_COMBINE[,c(2,1,3)]
 NEW_NEW_COMBINE=NEW_NEW_COMBINE[c(5,11,6,2,1,4,7,3,0,8,10,9,12)+1,]
 
 #colnames(NEW_NEW_COMBINE)=c('AC','STEM','OC')
-heatmap.2(NEW_NEW_COMBINE,scale='none',trace='none',col=colorRampPalette(c('grey80','red')),cexCol=1,Colv=F,Rowv=F,dendrogram='none')
+heatmap.2(NEW_NEW_COMBINE,scale='none',trace='none',col=colorRampPalette(c('grey90','indianred')),cexCol=1,Colv=F,Rowv=F,dendrogram='none')
 
 dev.off()
 
