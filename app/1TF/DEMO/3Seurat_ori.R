@@ -46,7 +46,8 @@ RES=0.6
 exp_data=as.matrix(read.table('../GSE70630_OG_processed_data_v2.txt.cleaned.txt',header=T,row.names=1))
 tf_ident=read.table('IDENT.txt')
 new_exp_data=exp_data[,which(colnames(exp_data) %in% tf_ident[,1])]
-EXP = CreateSeuratObject(raw.data = new_exp_data, min.cells = 0, min.genes=0)
+new_exp_data[is.na(new_exp_data)]=0
+EXP = CreateSeuratObject(raw.data = new_exp_data, min.cells = -1, min.genes=-1)
 EXP=NormalizeData(object = EXP, normalization.method = "LogNormalize", scale.factor = 10000)
 pdf('EXP_VarGene.pdf')
 EXP <- FindVariableGenes(object = EXP, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff =0, y.cutoff = 0.8)
@@ -61,7 +62,19 @@ EXP <- RunTSNE(object = EXP, dims.use = PCUSE, do.fast = TRUE)
 pdf('EXP_TSNE.pdf')
 TSNEPlot(object = EXP,do.label=T)
 dev.off()
-write.table(file='EXP_IDENT.txt',EXP@ident,row.names=T,col.names=F,sep='\t',quote=F)
+write.table(file='EXP_IDENT.txt', EXP@ident,row.names=T,col.names=F,sep='\t',quote=F)
+
+TAG=read.table('MODE_MAT.txt.tag')[,1]
+new_EXP=EXP
+TAG=as.factor(TAG)
+names(TAG)=names(new_EXP@ident)
+new_EXP@ident=TAG
+pdf('EXP_BATCH.pdf',width=7,height=7)
+TSNEPlot(object = new_EXP,do.label=F)
+dev.off()
+
+
+
 
 ################################################################################
 ################################################################################
@@ -78,7 +91,7 @@ all_gene=rownames(b)
 
 exp_ident=read.table('EXP_IDENT.txt')
 
-new_exp_data=b[,which(colnames(exp_data) %in% exp_ident[,1])]
+new_exp_data=b[,which(colnames(b) %in% exp_ident[,1])]
 
 EXP = CreateSeuratObject(raw.data = new_exp_data, min.cells = 0, min.genes=0)
 
