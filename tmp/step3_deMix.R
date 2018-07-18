@@ -107,7 +107,8 @@ SINGLE = function(i){
         #Remove unrobust bandwidth####
         iii=1
         while(iii<=length(peak_num_list)){
-            if(length(which(peak_num_list==peak_num_list[iii]))==1){
+            same_peaknum_number=length(which(peak_num_list==peak_num_list[iii]))
+            if(same_peaknum_number==1){
                 edge_score_list[iii]=0}
             iii=iii+1}
         ##############################
