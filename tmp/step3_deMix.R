@@ -102,7 +102,17 @@ SINGLE = function(i){
                     },error=function(e){cat("Catch :",conditionMessage(e),"\n")})
                 }
         bw=bw+BW_STEP}
-
+        
+        ##############################
+        ##############################
+        iii=1
+        while(iii<=length(peak_num_list)){
+            if(length(which(peak_num_list==peak_num_list[iii]))==1){
+                edge_score_list[iii]=0}
+            iii=iii+1}
+        ##############################
+        ##############################
+        
         if(length(edge_score_list)>0){
             ######
             run_flag=0
