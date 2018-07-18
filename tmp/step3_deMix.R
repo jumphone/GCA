@@ -104,15 +104,32 @@ SINGLE = function(i){
         bw=bw+BW_STEP}
         
         ##############################
+        ##############################
         ###Remove unrobust bandwidth##
+        old_bw_list=bw_list #bandwidth
+        old_second_lambda_list=second_lambda_list
+        old_peak_num_list=peak_num_list
+        old_edge_score_list=edge_score_list
+        #############################
+        bw_list=c() #bandwidth
+        second_lambda_list=c()
+        peak_num_list=c()
+        edge_score_list=c()
         iii=1
         while(iii<=length(peak_num_list)){
-            same_peaknum_number=length(which(peak_num_list==peak_num_list[iii]))
-            if(same_peaknum_number==1){
-                edge_score_list[iii]=0}
+            same_peaknum_number=length(which(old_peak_num_list==old_peak_num_list[iii]))
+            if(same_peaknum_number!=1){
+                bw_list=c(bw_list,old_bw_list[iii])
+                second_lambda_list=c(second_lambda_list,old_second_lambda_list[iii])
+                peak_num_list=c(peak_num_list,old_peak_num_list[iii])
+                edge_score_list=c(edge_score_list,old_edge_score_list[iii])
+                }
             iii=iii+1}
         ##############################
         ##############################
+        ##############################
+        
+        
         
         if(length(edge_score_list)>0){
             ######
