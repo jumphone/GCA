@@ -104,7 +104,7 @@ SINGLE = function(i){
         bw=bw+BW_STEP}
         
         ##############################
-        ##############################
+        #Remove unrobust bandwidth####
         iii=1
         while(iii<=length(peak_num_list)){
             if(length(which(peak_num_list==peak_num_list[iii]))==1){
