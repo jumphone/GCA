@@ -69,7 +69,7 @@ dim(b)
 
 SUR=as.numeric(as.character(a[,19]))
 data=cbind(b[,2],SUR)
-data[,2]=data[,2]/30
+data[,2]=data[,2]
 #boxplot(data[,2]~data[,1])
 status=rep(1,length(data[,1]))
 age=-as.numeric(as.character(a[,18]))
