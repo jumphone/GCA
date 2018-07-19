@@ -92,8 +92,8 @@ p.val=format(p.val, scientific = TRUE)
 autoplot(km_cluster_fit,main=paste0('chisq_test_p = ', as.character(p.val)) )
 autoplot(tmp_km_cluster_fit,main=paste0('chisq_test_p = ', as.character(p.val)) )
 dev.off()
-
-
+write.table(file='SUR_N.txt',sdf$n,row.names=T,col.names=T,quote=F,sep='\t')
+write.table(file='SUR_EXP.txt',sdf$exp,row.names=T,col.names=T,quote=F,sep='\t')
 
 ################################################################
 # Draw Graph
