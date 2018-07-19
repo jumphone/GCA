@@ -117,7 +117,7 @@ top10=read.table('top10.txt',row.names=1,header=T)
 cluster_list = unique(top10[,6])
 
 pdf('GRAPH.pdf',width=30,height=18)
-par(mfrow=c(2,2))
+#par(mfrow=c(2,2))
 for(this_cluster in cluster_list){   
     this_cluster_info=top10[which(top10[,6]==this_cluster),]    
     NET = cbind(rep('tag',length(this_cluster_info[,1])),rep('tag',length(this_cluster_info[,1])))  
