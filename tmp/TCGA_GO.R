@@ -163,7 +163,7 @@ for(this_cluster in cluster_list){
         this_node_color= NODE_COLOR[which(NODE_COLOR[,1]==as.character(vg)),2]  
         V(g)[vg]$color<-this_node_color
         }   
-    plot(main=as.character(this_cluster), g, vertex.label.cex=1.5,edge.width=1, vertex.size=10, vertex.label.dist=2, vertex.label.color = "black")
+    plot(main=as.character(this_cluster), g, vertex.label.cex=1.5,edge.width=1, vertex.size=10, vertex.label.dist=1, vertex.label.color = "black")
       
     }
 dev.off()
