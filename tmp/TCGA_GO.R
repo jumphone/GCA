@@ -71,6 +71,9 @@ SUR=as.numeric(as.character(a[,19]))
 data=cbind(b[,2],SUR)
 data[,2]=data[,2]
 #boxplot(data[,2]~data[,1])
+
+summary
+
 status=rep(1,length(data[,1]))
 age=-as.numeric(as.character(a[,18]))
 data=cbind(data,status,age)
@@ -93,8 +96,12 @@ p.val=format(p.val, scientific = TRUE)
 autoplot(km_cluster_fit,main=paste0('chisq_test_p = ', as.character(p.val)) )
 autoplot(tmp_km_cluster_fit,main=paste0('chisq_test_p = ', as.character(p.val)) )
 dev.off()
+
 write.table(file='SUR_N.txt',sdf$n,row.names=T,col.names=T,quote=F,sep='\t')
-write.table(file='SUR_EXP.txt',sdf$exp,row.names=T,col.names=T,quote=F,sep='\t')
+
+MEAN_SUR=aggregate(time~cluster,data=data,mean)
+write.table(file='SUR_MEAN.txt',MEAN_SUR,row.names=T,col.names=T,quote=F,sep='\t')
+
 
 ################################################################
 # Draw Graph
