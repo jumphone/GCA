@@ -45,6 +45,7 @@ TSNEPlot(object = EXP,do.label=T)
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey90", col.high = "red",cex.row=6 )
 dev.off()
 
+write.table(file='IDENT.txt',EXP@ident,row.names=T,col.names=F,sep='\t',quote=F)
 write.table(pbmc.markers ,file='markers.txt',row.names=T,col.names=T,quote=F,sep='\t')
 write.table(top10,file='top10.txt',row.names=T,col.names=T,quote=F,sep='\t')
 
