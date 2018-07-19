@@ -69,7 +69,7 @@ dim(b)
 
 SUR=as.numeric(as.character(a[,19]))
 data=cbind(b[,2],SUR)
-data[,2]=data[,2]
+data[,2]=data[,2]/30
 #boxplot(data[,2]~data[,1])
 
 summary
