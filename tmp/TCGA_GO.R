@@ -37,7 +37,7 @@ pbmc=EXP
 library(dplyr)
 pbmc.markers <- FindAllMarkers(object = pbmc, only.pos = TRUE, min.pct = 0.05, thresh.use = 0.1)
 pbmc.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
-top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(20, avg_logFC)
+top10 <- pbmc.markers %>% group_by(cluster) %>% top_n(30, avg_logFC)
 DoHeatmap(object = pbmc, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE,col.low = "grey90", col.mid = "grey75", col.high = "red",cex.row=6 )
 
 pdf('OUTPUT.pdf',width=7,height=7)
@@ -108,7 +108,7 @@ top10=read.table('top10.txt',row.names=1,header=T)
 cluster_list = unique(top10[,6])
 
 pdf('GRAPH.pdf',width=30,height=18)
-par(mfrow=c(3,5))
+par(mfrow=c(3,3))
 for(this_cluster in cluster_list){   
     this_cluster_info=top10[which(top10[,6]==this_cluster),]    
     NET = cbind(rep('tag',length(this_cluster_info[,1])),rep('tag',length(this_cluster_info[,1])))  
