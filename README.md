@@ -26,9 +26,9 @@ Human Oligodendrogliomas: http://omics.fudan.edu.cn/static/demo/index.html
 
 i) Build expression index ( Python )
 
-    python | step1_BuildIndex.py | NETWORK | EXP | OUTPUT_INDEX | RATE
+    python | step1_BuildIndex.py | PAIR_LIST | EXP | OUTPUT_INDEX | RATE
     
-    NETWORK: a list of tab-delimited gene pairs 
+    PAIR_LIST: a list of tab-delimited gene pairs 
     EXP: normalized expression matrix (without quotation marks)    
     OUTPUT_INDEX: the index file name, given by the user   
     RATE: the cutoff for the non-zero rate. For each gene pair, non-zero rate equals to the proportion of cells of which two genes both are detected. 
