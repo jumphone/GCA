@@ -1,4 +1,4 @@
-# GCA: Gene Correlation Analysis in Single-cell RNA-seq data
+# GCA: Gene Correlation Analysis for Single-cell RNA-seq data
 
 Author: Feng Zhang
 
