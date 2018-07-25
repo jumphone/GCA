@@ -20,7 +20,7 @@ Demo list: http://omics.fudan.edu.cn/static/demo/index.html (including Human oli
 
 1. Get normalized expression matrix:  [sup1_normData.R](/sup1_normData.R) 
 
-2. Downstream analysis of regulatory feature binary matrix: [sup2_Downstream.R](/sup2_Downstream.R)
+2. Downstream analysis (cluster & regulatory graph) of regulatory feature binary matrix: [sup2_Downstream.R](/sup2_Downstream.R)
 
 # How to run GCA
 
