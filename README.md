@@ -6,7 +6,7 @@ Email: 15110700005@fudan.edu.cn
 
 # Demo
 
-Human oligodendrogliomas result is available at http://omics.fudan.edu.cn/static/demo/index.html
+Demo list: http://omics.fudan.edu.cn/static/demo/index.html (including Human oligodendrogliomas)
 
 ![image](/image.png "image")
 
