@@ -9,14 +9,8 @@ exp_value=c()
 i=1
 while(i<=cell_num){
     exp_value=exp_data[,i]
-    
     exp_value_pos = exp_value[which(exp_value>0)] 
-  
-    #m=mean(exp_value_pos)
-    #s=sd(exp_value_pos) 
-    #r_exp_value_pos = rnorm(n=length(exp_value_pos),mean=m,sd=s)
     r_exp_value_pos=sample(exp_value_pos,size=length(exp_value_pos))
-  
     exp_data[which(exp_value>0),i]=r_exp_value_pos
     i=i+1
     print(i)
