@@ -11,7 +11,8 @@ while(i<=cell_num){
     exp_value=exp_data[,i]
     exp_value_pos = exp_value[which(exp_value>0)] 
     r_exp_value_pos=sample(exp_value_pos,size=length(exp_value_pos))
-    exp_data[which(exp_value>0),i]=r_exp_value_pos
+    exp_data[,i]=rep(0,gene_num)
+    exp_data[sample(c(1:gene_num),size=length(exp_value_pos)),i]=r_exp_value_pos
     i=i+1
     print(i)
     }
