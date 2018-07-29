@@ -19,8 +19,9 @@ while(i<=cell_num){
     #s=sd(exp_value_pos)
     #r_exp_value_pos=rnorm(length(exp_value_pos),mean=m,sd=d)
     r_exp_value_pos=sample(value,size=length(exp_value_pos))
-    exp_data[,i]=rep(0,gene_num)
-    exp_data[sample(c(1:gene_num),size=length(exp_value_pos)),i]=r_exp_value_pos
+    #exp_data[,i]=rep(0,gene_num)
+    #exp_data[sample(c(1:gene_num),size=length(exp_value_pos)),i]=r_exp_value_pos
+    exp_data[which(exp_value>0),i]=r_exp_value_pos
     i=i+1
     print(i)
     }
