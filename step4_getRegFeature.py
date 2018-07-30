@@ -99,12 +99,16 @@ def SINGLE(this_edge, this_tf, this_tg, this_mode,output_file):
     fi=open(edge_cluster_file) 
     header=fi.readline().rstrip().split('\t')
     tg_index=header.index(this_tg)
+    tf_index=header.index(this_tf)
     tg_noNA_exp=[]
+    tf_noNA_exp=[]
     for line in fi:
         seq=line.rstrip().split('\t')
         if seq[1]!='NA':
             tg_noNA_exp.append(float(seq[tg_index]))
+            tf_noNA_exp.append(float(seq[tf_index]))
     tg_cutoff = np.median(tg_noNA_exp)
+    tf_cutoff = np.median(tf_noNA_exp)
     #print tg_cutoff
     fi.close()
     
@@ -115,30 +119,20 @@ def SINGLE(this_edge, this_tf, this_tg, this_mode,output_file):
     fo.write(fi.readline().rstrip()+'\tMode\n')
     for line in fi:
         seq=line.rstrip().split()
-        
-        this_tf_flag = 0
-        this_tg_flag = 0
-        if seq[1] !='NA':
-            if float(seq[tg_index]) > tg_cutoff:
-                this_tg_flag=1
-            elif float(seq[tg_index]) < tg_cutoff:
-                this_tg_flag=-1
-            if seq[3] == tf_pos_clust:
-                this_tf_flag=1
-            else: #seq[3] == tf_neg_clust:
-                this_tf_flag=-1 
         output_mode='NA'
-        #print this_tf_flag, this_tg_flag
-        if this_tf_flag* this_tg_flag !=0:
-            #print this_tf_flag, this_tg_flag
-            if this_tg_flag ==1 and this_tf_flag ==1:
-                output_mode='TG_HI;TF_POS;'
-            elif this_tg_flag ==1 and this_tf_flag ==-1:
-                output_mode='TG_HI;TF_NEG;'
-            elif this_tg_flag ==-1 and this_tf_flag ==1:
-                output_mode='TG_LW;TF_POS;'
-            elif this_tg_flag ==-1 and this_tf_flag ==-1:
-                output_mode='TG_LW;TF_NEG;'
+        
+        if seq[1] !='NA':
+            if this_mode==1:
+                if float(seq[tg_index]) > tg_cutoff and float(seq[tf_index]) > tf_cutoff:
+                    output_mode='TG_HI;TF_POS;'
+                if float(seq[tg_index]) < tg_cutoff and float(seq[tf_index]) < tf_cutoff:
+                    output_mode='TG_HI;TF_POS;'
+            if this_mode==-1:
+                if float(seq[tg_index]) > tg_cutoff and float(seq[tf_index]) < tf_cutoff:
+                    output_mode='TG_HI;TF_POS;'
+                if float(seq[tg_index]) < tg_cutoff and float(seq[tf_index]) > tf_cutoff:
+                    output_mode='TG_HI;TF_POS;'            
+
         fo.write(line.rstrip()+'\t'+output_mode+'\n')
    
     fi.close()    
