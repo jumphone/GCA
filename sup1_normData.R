@@ -4,7 +4,7 @@ library(Matrix)
 
 exp_data=Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")
 
-#exp_data=read.table(data.dir = "READ_COUNT_MATRIX.txt",sep='\t',row.names=1,header=T)
+#exp_data=read.table(file = "READ_COUNT_MATRIX.txt",sep='\t',row.names=1,header=T)
 #exp_data[is.na(exp_data)]=0
 
 
