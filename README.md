@@ -8,8 +8,6 @@ Email: 15110700005@fudan.edu.cn
 
 Demo list: http://omics.fudan.edu.cn/static/demo/index.html (including Human oligodendrogliomas)
 
-Running time (GSE70630): ~20 min (from step1 to step4), Centos7, Intel(R) Xeon(R) CPU E5-2650 v3 @ 2.30GHz, 4 threads 
-
 ![image](/image.png "image")
 
 # Requirements
@@ -17,6 +15,8 @@ Running time (GSE70630): ~20 min (from step1 to step4), Centos7, Intel(R) Xeon(R
     Operating system: Mac or Linux, python=2.7, R=3.5    
     Python packages: scipy    
     R packages: stringr, pastecs, mixtools, igraph
+    
+    Running time (GSE70630): ~20 min (from step1 to step4), Centos7, Intel(R) Xeon(R) CPU E5-2650 v3 @ 2.30GHz, 4 threads 
 
 # Tips
 
