@@ -114,7 +114,7 @@ for(this_cluster in cluster_list){
         if(this_tg_exp == 'LW' & this_mode=='R'){this_tf_exp='HI'}
         if( max( as.numeric(  TG_EXP[which(TG_EXP[,1]==this_tg & TG_EXP[,2]==this_tg_exp),3]  ) )==max( as.numeric(  TG_EXP[which(TG_EXP[,1]==this_tg),3]) )
             & max(as.numeric(  TF_EXP[which(TF_EXP[,1]==this_tf & TF_EXP[,2]==this_tf_exp),3]))==max(as.numeric(  TF_EXP[which(TF_EXP[,1]==this_tf),3]) )
-            & length(which(check_list ==paste0(this_tf,':',this_tg)))==1
+            #& length(which(check_list ==paste0(this_tf,':',this_tg)))==1
             ){
             
             if(this_mode=='A'){EDGE_COLOR = c(EDGE_COLOR ,'red')}
