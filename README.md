@@ -16,7 +16,7 @@ Demo list: http://omics.fudan.edu.cn/static/demo/index.html (including Human oli
     Python packages: scipy    
     R packages: stringr, pastecs, mixtools, igraph
     
-    Running time (GSE70630): ~20 min (from step1 to step4), Centos7, Intel(R) Xeon(R) CPU E5-2650 v3 @ 2.30GHz, 4 threads 
+    Running time (GSE70630): ~20 min (from step1 to step4), 4 threads, Centos7, Intel(R) Xeon(R) CPU E5-2650 v3 @ 2.30GHz 
 
 # Tips
 
