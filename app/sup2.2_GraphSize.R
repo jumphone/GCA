@@ -38,10 +38,10 @@ for(this_cluster in cluster_list){
         i=i+1}
     
 
-
-    TG_EXP=t(TG_EXP)
-    TF_EXP=t(TF_EXP)
-
+    ALL_EXP=t(cbind(TG_EXP,TF_EXP))
+    #TG_EXP=t(TG_EXP)
+    #TF_EXP=t(TF_EXP)
+    
 
 
     NET = cbind(rep('tag',length(this_cluster_info[,1])),rep('tag',length(this_cluster_info[,1])))  
@@ -59,8 +59,14 @@ for(this_cluster in cluster_list){
         if(this_tg_exp == 'HI' & this_mode=='R'){this_tf_exp='LW'}
         if(this_tg_exp == 'LW' & this_mode=='A'){this_tf_exp='LW'}
         if(this_tg_exp == 'LW' & this_mode=='R'){this_tf_exp='HI'}
-        if( max( as.numeric(  TG_EXP[which(TG_EXP[,1]==this_tg & TG_EXP[,2]==this_tg_exp),3]  ) )==max( as.numeric(  TG_EXP[which(TG_EXP[,1]==this_tg),3]) )
-            & max(as.numeric(  TF_EXP[which(TF_EXP[,1]==this_tf & TF_EXP[,2]==this_tf_exp),3]))==max(as.numeric(  TF_EXP[which(TF_EXP[,1]==this_tf),3]) )
+          
+        MAX_TG_INDEX=which(as.numeric(  ALL_EXP[which(ALL_EXP[,1]==this_tg),3])==max( as.numeric(  ALL_EXP[which(ALL_EXP[,1]==this_tg),3])))[1]
+        MAX_TF_INDEX=which(as.numeric(  ALL_EXP[which(ALL_EXP[,1]==this_tf),3])==max( as.numeric(  ALL_EXP[which(ALL_EXP[,1]==this_tf),3])))[1]
+
+
+        if( ALL_EXP[which(ALL_EXP[,1]==this_tg & ALL_EXP[,2]==this_tg_exp),2]  ==  ALL_EXP[which(ALL_EXP[,1]==this_tg),2][MAX_TG_INDEX] 
+
+            & ALL_EXP[which(ALL_EXP[,1]==this_tf & ALL_EXP[,2]==this_tf_exp),2]  ==  ALL_EXP[which(ALL_EXP[,1]==this_tf),2][MAX_TF_INDEX] 
             # & length(which(check_list ==paste0(this_tf,':',this_tg)))==1
             ){
             
