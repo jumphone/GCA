@@ -91,11 +91,6 @@ for(this_cluster in cluster_list){
 
     TG_EXP=t(TG_EXP)
     TF_EXP=t(TF_EXP)
-    #TG_EXP=as.matrix(TG_EXP)
-
-    #TG_EXP[,3]=as.numeric(TG_EXP[,3])
-    #TF_EXP[,3]=as.numeric(TF_EXP[,3])  
-
 
     NET = cbind(rep('tag',length(this_cluster_info[,1])),rep('tag',length(this_cluster_info[,1])))  
     EDGE_COLOR = c()
