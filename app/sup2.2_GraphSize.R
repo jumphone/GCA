@@ -39,6 +39,7 @@ for(this_cluster in cluster_list){
     
 
     ALL_EXP=t(cbind(TG_EXP,TF_EXP))
+    ALL_EXP[which(ALL_EXP[,2]<0.01),2]=0.01
     #TG_EXP=t(TG_EXP)
     #TF_EXP=t(TF_EXP)
     
