@@ -8,6 +8,8 @@ Email: 15110700005@fudan.edu.cn
 
 Demo list: http://omics.fudan.edu.cn/static/demo/index.html (including Human oligodendrogliomas)
 
+Running time (GSE70630): ~20 min (from step1 to step4), Centos7, Intel(R) Xeon(R) CPU E5-2650 v3 @ 2.30GHz, 4 threads 
+
 ![image](/image.png "image")
 
 # Requirements
