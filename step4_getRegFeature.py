@@ -121,7 +121,7 @@ def SINGLE(this_edge, this_tf, this_tg, this_mode,output_file):
         seq=line.rstrip().split()
         output_mode='NA'
         
-        if seq[1] !='NA':
+        if seq[1] !='NA' and seq[3] == tf_pos_clust:
             if this_mode==1:
                 if float(seq[tg_index]) > tg_cutoff and float(seq[tf_index]) > tf_cutoff:
                     output_mode='TG_HI;TF_POS;'
