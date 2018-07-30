@@ -50,7 +50,7 @@ iii) Mixture models analysis ( R )
     OUTPUT: the name of the output directory, given by the user
     CPU: the number of threads to run GCA 
     SEED: seed for random function in R
-    CUTOFF: the cutoff of edge score to draw the gene graph
+    CUTOFF: the cutoff of edge score (HCS) to draw the gene graph
     
 iv) Get regulatory feature binary matrix ( Python )
 
