@@ -3,11 +3,11 @@ NET_FILE=$2
 OUTPUT=$3 
 CPU=$4
 
-SEED=321
+SEED=123
 PERCENT=0.1
 PYTHON="python"
 RSCRIPT="Rscript"
-CUTOFF=0.1
+CUTOFF=0.05
 
 $PYTHON step1_BuildIndex.py $NET_FILE $NORM_EXP $OUTPUT\.data $PERCENT
 $PYTHON step2_CalZmat.py $OUTPUT\.data $OUTPUT\.data.zmat $CPU
