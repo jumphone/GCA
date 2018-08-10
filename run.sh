@@ -12,4 +12,4 @@ CUTOFF=0.05
 $PYTHON step1_BuildIndex.py $NET_FILE $NORM_EXP $OUTPUT\.data $PERCENT
 $PYTHON step2_CalZmat.py $OUTPUT\.data $OUTPUT\.data.zmat $CPU
 $RSCRIPT step3_deMix.R $NORM_EXP $OUTPUT\.data.zmat $OUTPUT\.data.zmat.gca_result $CPU $SEED $CUTOFF
-
+$PYTHON step4_getRegFeature.py  $NET_FILE  $OUTPUT\.data.zmat.gca_result MODE_MAT.txt
