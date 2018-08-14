@@ -31,7 +31,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp*direction > -log(0.05,2))]='red'
-plot(x=c(0: (length(table(IDENT))-1) ),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,main='STEM',xlab='cluster number',ylab='-log2_fdr')
+plot(x=c(0: (length(table(IDENT))-1) ),y=neg_log_2_adjp*direction,pch=16,ylim=c(-150,50),col=COL,cex=3,main='STEM',xlab='cluster number',ylab='direction*neg_log2_fdr')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
@@ -58,7 +58,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp*direction > -log(0.05,2))]='red'
-plot(x=c(0: (length(table(IDENT))-1) ),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='AC',xlab='cluster number',ylab='-log2_fdr')
+plot(x=c(0: (length(table(IDENT))-1) ),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='AC',xlab='cluster number',ylab='direction*neg_log2_fdr')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
@@ -84,7 +84,7 @@ direction= (med_stem_score - median(stem_score_b))/abs((med_stem_score - median(
 #abline(h=log(0.05,2),lty=3)
 COL=rep('black',length(neg_log_2_adjp))
 COL[which(neg_log_2_adjp*direction > -log(0.05,2))]='red'
-plot(x=c(0: (length(table(IDENT))-1) ),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='OC',xlab='cluster number',ylab='-log2_fdr')
+plot(x=c(0: (length(table(IDENT))-1) ),y=neg_log_2_adjp*direction,pch=16,col=COL,cex=3,main='OC',xlab='cluster number',ylab='direction*neg_log2_fdr')
 abline(h=0)
 abline(h=-log(0.05,2),lty=3)
 abline(h=log(0.05,2),lty=3)
